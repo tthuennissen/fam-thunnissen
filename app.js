@@ -311,15 +311,48 @@ function renderTaskBoard() {
   });
 }
 
-function renderShoppingBoard() {
-  const shoppingColumns = shoppingBoard.querySelectorAll('.instance-column');
-  shoppingColumns.forEach(column => {
+function renderEventsBoard() {
+  const eventsColumns = eventsBoard.querySelectorAll('.instance-column');
+  eventsColumns.forEach(column => {
     const list = column.querySelector('.item-list');
-    const category = column.dataset.category;
-    const items = state.shopping.filter(item => item.category === category && !item.done);
+    const member = column.dataset.member;
+    const items = state.events.filter(item => {
+      const itemMember = taskMembers.includes(item.member) ? item.member : 'Allgemein';
+      return itemMember === member && !item.done;
+    });
     list.innerHTML = '';
-    items.forEach(item => list.appendChild(createItemCard(item, 'shopping')));
-    column.querySelector('.column-count').textContent = `${items.length} offene Artikel`;
+    items.forEach(item => list.appendChild(createItemCard(item, 'events')));
+    column.querySelector('.column-count').textContent = `${items.length} geplante Termine`;
+  });
+}
+
+function renderNotesBoard() {
+  const notesColumns = notesBoard.querySelectorAll('.instance-column');
+  notesColumns.forEach(column => {
+    const list = column.querySelector('.item-list');
+    const member = column.dataset.member;
+    const items = state.notes.filter(item => {
+      const itemMember = taskMembers.includes(item.member) ? item.member : 'Allgemein';
+      return itemMember === member;
+    });
+    list.innerHTML = '';
+    items.forEach(item => list.appendChild(createItemCard(item, 'notes')));
+    column.querySelector('.column-count').textContent = `${items.length} Notizen`;
+  });
+}
+
+function renderContactsBoard() {
+  const contactsColumns = contactsBoard.querySelectorAll('.instance-column');
+  contactsColumns.forEach(column => {
+    const list = column.querySelector('.item-list');
+    const member = column.dataset.member;
+    const items = state.contacts.filter(item => {
+      const itemMember = taskMembers.includes(item.member) ? item.member : 'Allgemein';
+      return itemMember === member;
+    });
+    list.innerHTML = '';
+    items.forEach(item => list.appendChild(createItemCard(item, 'contacts')));
+    column.querySelector('.column-count').textContent = `${items.length} Kontakte`;
   });
 }
 
