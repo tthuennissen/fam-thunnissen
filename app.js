@@ -39,12 +39,14 @@ const taskBoard = document.getElementById('task-board');
 const taskColumns = document.querySelectorAll('.instance-column');
 const addTaskButtons = document.querySelectorAll('.column-add-button');
 const inlineTaskForms = document.querySelectorAll('.inline-task-form');
+const showCompletedCheckbox = document.getElementById('show-completed-toggle');
 const shoppingList = document.getElementById('shopping-list');
 const eventList = document.getElementById('event-list');
 const noteList = document.getElementById('note-list');
 const contactList = document.getElementById('contact-list');
 
 const taskMembers = ['Kristin', 'Tim', 'Charlotte', 'Moritz', 'Allgemein', 'Offen'];
+let showCompletedTasks = false;
 
 function saveState() {
   localStorage.setItem(storageKey, JSON.stringify(state));
@@ -239,6 +241,7 @@ function renderTaskBoard() {
     const list = column.querySelector('.task-list');
     const member = column.dataset.member;
     const tasksForMember = state.tasks.filter(task => {
+      if (!showCompletedTasks && task.done) return false;
       const taskMember = taskMembers.includes(task.member) ? task.member : 'Allgemein';
       return taskMember === member;
     });
@@ -267,6 +270,13 @@ function setupTaskBoardDragAndDrop() {
 }
 
 function setupInlineTaskForms() {
+  if (showCompletedCheckbox) {
+    showCompletedCheckbox.addEventListener('change', event => {
+      showCompletedTasks = event.target.checked;
+      renderAll();
+    });
+  }
+
   taskBoard.addEventListener('click', event => {
     const button = event.target.closest('.column-add-button');
     if (!button) return;
