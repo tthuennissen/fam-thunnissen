@@ -332,14 +332,16 @@ button {
 }
 
 .item-card {
-  padding: 14px;
-  border-radius: 18px;
+  padding: 12px;
+  border-radius: 16px;
   border: 1px solid var(--border);
   background: var(--surface-strong);
   display: grid;
-  gap: 8px;
-  height: 150px;
+  gap: 6px;
+  height: 125px;
+  min-height: 125px;
   overflow: hidden;
+  grid-template-rows: auto 1fr auto;
 }
 
 .item-card.overdue {
@@ -354,29 +356,38 @@ button {
 
 .item-card h4 {
   margin: 0;
-  font-size: 1rem;
+  font-size: 0.95rem;
+  line-height: 1.1;
 }
 
 .item-meta {
-  display: grid;
-  gap: 5px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
   color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.item-meta div {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .item-actions {
   display: flex;
-  flex-wrap: wrap;
   gap: 4px;
+  justify-content: flex-start;
 }
 
 .item-actions button {
-  width: 26px;
-  height: 26px;
+  width: 24px;
+  height: 24px;
   padding: 0;
   border-radius: 8px;
   background: #eef2f8;
   color: var(--text);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   display: grid;
   place-items: center;
   min-width: auto;
