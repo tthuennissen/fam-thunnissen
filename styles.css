@@ -263,6 +263,11 @@ button {
   display: grid;
   gap: 10px;
   margin-bottom: 16px;
+  padding: 16px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
 }
 
 .inline-task-form.hidden {
@@ -325,6 +330,16 @@ button {
   background: var(--surface-strong);
   display: grid;
   gap: 10px;
+}
+
+.item-card.overdue {
+  border-color: #dc2626;
+  background: rgba(220, 38, 38, 0.08);
+}
+
+.item-card.overdue .item-meta,
+.item-card.overdue h4 {
+  color: #991b1b;
 }
 
 .item-card h4 {

@@ -127,6 +127,9 @@ function createTaskCard(task) {
   const meta = document.createElement('div');
   meta.className = 'item-meta';
   meta.innerHTML = `<div>Fällig: ${task.due || 'keine Angabe'}</div>`;
+  if (task.due && !task.done && new Date(task.due) < new Date().setHours(0,0,0,0)) {
+    li.classList.add('overdue');
+  }
   li.appendChild(meta);
 
   const actions = document.createElement('div');
@@ -209,16 +212,15 @@ function setupInlineTaskForms() {
     form.addEventListener('submit', event => {
       event.preventDefault();
       const title = form.querySelector('.task-title-input').value.trim();
-      if (!title) return;
       const due = form.querySelector('.task-due-input').value;
-      const priority = form.querySelector('.task-priority-input').value;
+      if (!title || !due) return;
       const member = form.dataset.member;
       addItem('tasks', {
         id: crypto.randomUUID(),
         title,
         due,
         member,
-        priority,
+        priority: 'Normal',
         done: false
       });
       form.reset();
