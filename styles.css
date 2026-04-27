@@ -469,6 +469,33 @@ button {
   text-decoration: line-through;
 }
 
+.completed-section {
+  margin-top: 12px;
+}
+
+.completed-section hr {
+  border: none;
+  border-top: 1px solid rgba(79, 92, 125, 0.14);
+  margin: 10px 0;
+}
+
+.completed-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.completed-list {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
 @media (max-width: 1280px) {
   .task-board {
     grid-template-columns: repeat(3, minmax(0, 1fr));

@@ -53,6 +53,20 @@ function saveState() {
   localStorage.setItem(storageKey, JSON.stringify(state));
 }
 
+function cleanupCompletedTasks() {
+  const now = Date.now();
+  const threeDaysMs = 3 * 24 * 60 * 60 * 1000;
+  const previousLength = state.tasks.length;
+  state.tasks = state.tasks.filter(task => {
+    if (!task.done) return true;
+    if (!task.completedAt) return true;
+    return now - new Date(task.completedAt).getTime() <= threeDaysMs;
+  });
+  if (state.tasks.length !== previousLength) {
+    saveState();
+  }
+}
+
 function switchPanel(panelId) {
   panels.forEach(panel => panel.classList.toggle('active', panel.id === panelId));
   navButtons.forEach(button => button.classList.toggle('active', button.dataset.panel === panelId));
@@ -119,7 +133,7 @@ function createItemCard(item, type) {
 function createTaskCard(task) {
   const li = document.createElement('li');
   li.className = 'item-card';
-  li.draggable = true;
+  li.draggable = !task.done;
   li.dataset.id = task.id;
 
   const title = document.createElement('h4');
@@ -238,17 +252,55 @@ function assignTaskToMember(id, member) {
 }
 
 function renderTaskBoard() {
+  const now = Date.now();
+  const threeDaysMs = 3 * 24 * 60 * 60 * 1000;
+
   taskColumns.forEach(column => {
     const list = column.querySelector('.task-list');
     const member = column.dataset.member;
-    const tasksForMember = state.tasks.filter(task => {
-      if (!showCompletedTasks && task.done) return false;
+    let completedSection = column.querySelector('.completed-section');
+
+    if (!completedSection) {
+      completedSection = document.createElement('div');
+      completedSection.className = 'completed-section hidden';
+      completedSection.innerHTML = `
+        <hr />
+        <div class="completed-header">
+          <span>Erledigt (letzte 3 Tage)</span>
+          <span class="completed-count"></span>
+        </div>
+        <ul class="completed-list"></ul>
+      `;
+      list.insertAdjacentElement('afterend', completedSection);
+    }
+
+    const openTasks = state.tasks.filter(task => {
       const taskMember = taskMembers.includes(task.member) ? task.member : 'Allgemein';
-      return taskMember === member;
+      return taskMember === member && !task.done;
     });
+
+    const recentCompletedTasks = state.tasks.filter(task => {
+      const taskMember = taskMembers.includes(task.member) ? task.member : 'Allgemein';
+      if (taskMember !== member || !task.done || !task.completedAt) return false;
+      const completedDate = new Date(task.completedAt);
+      return now - completedDate.getTime() <= threeDaysMs;
+    });
+
     list.innerHTML = '';
-    column.querySelector('.column-count').textContent = `${tasksForMember.length} Aufgaben`;
-    tasksForMember.forEach(task => list.appendChild(createTaskCard(task)));
+    openTasks.forEach(task => list.appendChild(createTaskCard(task)));
+    column.querySelector('.column-count').textContent = `${openTasks.length} offene Aufgaben`;
+
+    const completedList = completedSection.querySelector('.completed-list');
+    const completedCount = completedSection.querySelector('.completed-count');
+    completedList.innerHTML = '';
+    completedCount.textContent = `${recentCompletedTasks.length} Aufgaben`;
+
+    if (showCompletedTasks && recentCompletedTasks.length > 0) {
+      completedSection.classList.remove('hidden');
+      recentCompletedTasks.forEach(task => completedList.appendChild(createTaskCard(task)));
+    } else {
+      completedSection.classList.add('hidden');
+    }
   });
 }
 
@@ -366,12 +418,24 @@ function updateTask(id, changes) {
 }
 
 function toggleDone(type, id) {
-  state[type] = state[type].map(item => item.id === id ? { ...item, done: !item.done } : item);
+  state[type] = state[type].map(item => {
+    if (item.id !== id) return item;
+    const done = !item.done;
+    if (type === 'tasks') {
+      return {
+        ...item,
+        done,
+        completedAt: done ? (item.completedAt || new Date().toISOString()) : undefined
+      };
+    }
+    return { ...item, done };
+  });
   saveState();
   renderAll();
 }
 
 function renderAll() {
+  cleanupCompletedTasks();
   renderTaskBoard();
   renderList('shopping', shoppingList);
   renderList('events', eventList);
