@@ -46,7 +46,8 @@ const noteList = document.getElementById('note-list');
 const contactList = document.getElementById('contact-list');
 
 const taskMembers = ['Kristin', 'Tim', 'Charlotte', 'Moritz', 'Allgemein', 'Offen'];
-let showCompletedTasks = false;
+const completedToggleKey = 'family-organizer-showCompletedTasks';
+let showCompletedTasks = JSON.parse(localStorage.getItem(completedToggleKey) || 'false');
 
 function saveState() {
   localStorage.setItem(storageKey, JSON.stringify(state));
@@ -271,8 +272,10 @@ function setupTaskBoardDragAndDrop() {
 
 function setupInlineTaskForms() {
   if (showCompletedCheckbox) {
+    showCompletedCheckbox.checked = showCompletedTasks;
     showCompletedCheckbox.addEventListener('change', event => {
       showCompletedTasks = event.target.checked;
+      localStorage.setItem(completedToggleKey, JSON.stringify(showCompletedTasks));
       renderAll();
     });
   }
