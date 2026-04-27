@@ -15,13 +15,15 @@
       </div>
 
       <nav class="nav-menu" aria-label="Navigation">
-        <button type="button" class="nav-button active" data-panel="summary-panel">Übersicht</button>
-        <button type="button" class="nav-button" data-panel="tasks-panel">Aufgaben</button>
-        <button type="button" class="nav-button" data-panel="shopping-panel">Einkauf</button>
-        <button type="button" class="nav-button" data-panel="events-panel">Termine</button>
-        <button type="button" class="nav-button" data-panel="notes-panel">Notizen</button>
-        <button type="button" class="nav-button" data-panel="contacts-panel">Kontakte</button>
+        <button type="button" class="nav-button active" data-panel="summary-panel"><i class="icon">📊</i><span>Übersicht</span></button>
+        <button type="button" class="nav-button" data-panel="tasks-panel"><i class="icon">✅</i><span>Aufgaben</span></button>
+        <button type="button" class="nav-button" data-panel="shopping-panel"><i class="icon">🛒</i><span>Einkauf</span></button>
+        <button type="button" class="nav-button" data-panel="events-panel"><i class="icon">📅</i><span>Termine</span></button>
+        <button type="button" class="nav-button" data-panel="notes-panel"><i class="icon">📝</i><span>Notizen</span></button>
+        <button type="button" class="nav-button" data-panel="contacts-panel"><i class="icon">👥</i><span>Kontakte</span></button>
       </nav>
+
+      <button type="button" id="sidebar-toggle" class="sidebar-toggle" aria-label="Menü ein-/ausklappen">◀</button>
     </aside>
 
     <main class="main-content">
@@ -69,7 +71,7 @@
           </label>
         </div>
 
-        <div class="task-board" id="task-board">
+        <div class="task-board board" id="task-board">
           <div class="instance-column" data-member="Allgemein">
             <div class="column-header">
               <h3>Allgemein</h3>
@@ -156,15 +158,93 @@
           <h2>Einkaufsliste</h2>
           <p>Artikel hinzufügen und als erledigt markieren.</p>
         </div>
-        <div class="list-container">
-          <ul id="shopping-list" class="item-list"></ul>
+
+        <div class="shopping-board board" id="shopping-board">
+          <div class="instance-column" data-member="Allgemein">
+            <div class="column-header">
+              <h3>Allgemein</h3>
+              <button type="button" class="column-add-button" aria-label="Neuen Einkaufsartikel für Allgemein hinzufügen">+</button>
+            </div>
+            <p class="column-count"></p>
+            <form class="inline-shopping-form hidden" data-member="Allgemein" aria-label="Artikel hinzufügen für Allgemein">
+              <input type="text" class="shopping-item-input" placeholder="Artikel" required />
+              <input type="text" class="shopping-qty-input" placeholder="Menge" />
+              <input type="text" class="shopping-category-input" placeholder="Kategorie" />
+              <button type="submit">Hinzufügen</button>
+            </form>
+            <ul class="item-list"></ul>
+          </div>
+          <div class="instance-column" data-member="Kristin">
+            <div class="column-header">
+              <h3>Kristin</h3>
+              <button type="button" class="column-add-button" aria-label="Neuen Einkaufsartikel für Kristin hinzufügen">+</button>
+            </div>
+            <p class="column-count"></p>
+            <form class="inline-shopping-form hidden" data-member="Kristin" aria-label="Artikel hinzufügen für Kristin">
+              <input type="text" class="shopping-item-input" placeholder="Artikel" required />
+              <input type="text" class="shopping-qty-input" placeholder="Menge" />
+              <input type="text" class="shopping-category-input" placeholder="Kategorie" />
+              <button type="submit">Hinzufügen</button>
+            </form>
+            <ul class="item-list"></ul>
+          </div>
+          <div class="instance-column" data-member="Tim">
+            <div class="column-header">
+              <h3>Tim</h3>
+              <button type="button" class="column-add-button" aria-label="Neuen Einkaufsartikel für Tim hinzufügen">+</button>
+            </div>
+            <p class="column-count"></p>
+            <form class="inline-shopping-form hidden" data-member="Tim" aria-label="Artikel hinzufügen für Tim">
+              <input type="text" class="shopping-item-input" placeholder="Artikel" required />
+              <input type="text" class="shopping-qty-input" placeholder="Menge" />
+              <input type="text" class="shopping-category-input" placeholder="Kategorie" />
+              <button type="submit">Hinzufügen</button>
+            </form>
+            <ul class="item-list"></ul>
+          </div>
+          <div class="instance-column" data-member="Charlotte">
+            <div class="column-header">
+              <h3>Charlotte</h3>
+              <button type="button" class="column-add-button" aria-label="Neuen Einkaufsartikel für Charlotte hinzufügen">+</button>
+            </div>
+            <p class="column-count"></p>
+            <form class="inline-shopping-form hidden" data-member="Charlotte" aria-label="Artikel hinzufügen für Charlotte">
+              <input type="text" class="shopping-item-input" placeholder="Artikel" required />
+              <input type="text" class="shopping-qty-input" placeholder="Menge" />
+              <input type="text" class="shopping-category-input" placeholder="Kategorie" />
+              <button type="submit">Hinzufügen</button>
+            </form>
+            <ul class="item-list"></ul>
+          </div>
+          <div class="instance-column" data-member="Moritz">
+            <div class="column-header">
+              <h3>Moritz</h3>
+              <button type="button" class="column-add-button" aria-label="Neuen Einkaufsartikel für Moritz hinzufügen">+</button>
+            </div>
+            <p class="column-count"></p>
+            <form class="inline-shopping-form hidden" data-member="Moritz" aria-label="Artikel hinzufügen für Moritz">
+              <input type="text" class="shopping-item-input" placeholder="Artikel" required />
+              <input type="text" class="shopping-qty-input" placeholder="Menge" />
+              <input type="text" class="shopping-category-input" placeholder="Kategorie" />
+              <button type="submit">Hinzufügen</button>
+            </form>
+            <ul class="item-list"></ul>
+          </div>
+          <div class="instance-column" data-member="Offen">
+            <div class="column-header">
+              <h3>Offen</h3>
+              <button type="button" class="column-add-button" aria-label="Neuen Einkaufsartikel für Offen hinzufügen">+</button>
+            </div>
+            <p class="column-count"></p>
+            <form class="inline-shopping-form hidden" data-member="Offen" aria-label="Artikel hinzufügen für Offen">
+              <input type="text" class="shopping-item-input" placeholder="Artikel" required />
+              <input type="text" class="shopping-qty-input" placeholder="Menge" />
+              <input type="text" class="shopping-category-input" placeholder="Kategorie" />
+              <button type="submit">Hinzufügen</button>
+            </form>
+            <ul class="item-list"></ul>
+          </div>
         </div>
-        <form id="shopping-form" class="entry-form" aria-label="Neuen Einkaufsartikel hinzufügen">
-          <input id="shopping-item" type="text" placeholder="Artikel" required />
-          <input id="shopping-qty" type="text" placeholder="Menge" />
-          <input id="shopping-category" type="text" placeholder="Kategorie" />
-          <button type="submit">Artikel hinzufügen</button>
-        </form>
       </section>
 
       <section id="events-panel" class="panel">
@@ -172,16 +252,99 @@
           <h2>Termine</h2>
           <p>Wichtige Termine verwalten.</p>
         </div>
-        <div class="list-container">
-          <ul id="event-list" class="item-list"></ul>
+
+        <div class="events-board board" id="events-board">
+          <div class="instance-column" data-member="Allgemein">
+            <div class="column-header">
+              <h3>Allgemein</h3>
+              <button type="button" class="column-add-button" aria-label="Neuen Termin für Allgemein hinzufügen">+</button>
+            </div>
+            <p class="column-count"></p>
+            <form class="inline-events-form hidden" data-member="Allgemein" aria-label="Termin hinzufügen für Allgemein">
+              <input type="text" class="events-title-input" placeholder="Termin" required />
+              <input type="date" class="events-date-input" required />
+              <input type="time" class="events-time-input" />
+              <input type="text" class="events-location-input" placeholder="Ort" />
+              <button type="submit">Hinzufügen</button>
+            </form>
+            <ul class="item-list"></ul>
+          </div>
+          <div class="instance-column" data-member="Kristin">
+            <div class="column-header">
+              <h3>Kristin</h3>
+              <button type="button" class="column-add-button" aria-label="Neuen Termin für Kristin hinzufügen">+</button>
+            </div>
+            <p class="column-count"></p>
+            <form class="inline-events-form hidden" data-member="Kristin" aria-label="Termin hinzufügen für Kristin">
+              <input type="text" class="events-title-input" placeholder="Termin" required />
+              <input type="date" class="events-date-input" required />
+              <input type="time" class="events-time-input" />
+              <input type="text" class="events-location-input" placeholder="Ort" />
+              <button type="submit">Hinzufügen</button>
+            </form>
+            <ul class="item-list"></ul>
+          </div>
+          <div class="instance-column" data-member="Tim">
+            <div class="column-header">
+              <h3>Tim</h3>
+              <button type="button" class="column-add-button" aria-label="Neuen Termin für Tim hinzufügen">+</button>
+            </div>
+            <p class="column-count"></p>
+            <form class="inline-events-form hidden" data-member="Tim" aria-label="Termin hinzufügen für Tim">
+              <input type="text" class="events-title-input" placeholder="Termin" required />
+              <input type="date" class="events-date-input" required />
+              <input type="time" class="events-time-input" />
+              <input type="text" class="events-location-input" placeholder="Ort" />
+              <button type="submit">Hinzufügen</button>
+            </form>
+            <ul class="item-list"></ul>
+          </div>
+          <div class="instance-column" data-member="Charlotte">
+            <div class="column-header">
+              <h3>Charlotte</h3>
+              <button type="button" class="column-add-button" aria-label="Neuen Termin für Charlotte hinzufügen">+</button>
+            </div>
+            <p class="column-count"></p>
+            <form class="inline-events-form hidden" data-member="Charlotte" aria-label="Termin hinzufügen für Charlotte">
+              <input type="text" class="events-title-input" placeholder="Termin" required />
+              <input type="date" class="events-date-input" required />
+              <input type="time" class="events-time-input" />
+              <input type="text" class="events-location-input" placeholder="Ort" />
+              <button type="submit">Hinzufügen</button>
+            </form>
+            <ul class="item-list"></ul>
+          </div>
+          <div class="instance-column" data-member="Moritz">
+            <div class="column-header">
+              <h3>Moritz</h3>
+              <button type="button" class="column-add-button" aria-label="Neuen Termin für Moritz hinzufügen">+</button>
+            </div>
+            <p class="column-count"></p>
+            <form class="inline-events-form hidden" data-member="Moritz" aria-label="Termin hinzufügen für Moritz">
+              <input type="text" class="events-title-input" placeholder="Termin" required />
+              <input type="date" class="events-date-input" required />
+              <input type="time" class="events-time-input" />
+              <input type="text" class="events-location-input" placeholder="Ort" />
+              <button type="submit">Hinzufügen</button>
+            </form>
+            <ul class="item-list"></ul>
+          </div>
+          <div class="instance-column" data-member="Offen">
+            <div class="column-header">
+              <h3>Offen</h3>
+              <button type="button" class="column-add-button" aria-label="Neuen Termin für Offen hinzufügen">+</button>
+            </div>
+            <p class="column-count"></p>
+            <form class="inline-events-form hidden" data-member="Offen" aria-label="Termin hinzufügen für Offen">
+              <input type="text" class="events-title-input" placeholder="Termin" required />
+              <input type="date" class="events-date-input" required />
+              <input type="time" class="events-time-input" />
+              <input type="text" class="events-location-input" placeholder="Ort" />
+              <button type="submit">Hinzufügen</button>
+            </form>
+            <ul class="item-list"></ul>
+          </div>
         </div>
-        <form id="event-form" class="entry-form" aria-label="Neuen Termin hinzufügen">
-          <input id="event-title" type="text" placeholder="Termin" required />
-          <input id="event-date" type="date" required />
-          <input id="event-time" type="time" />
-          <input id="event-location" type="text" placeholder="Ort" />
-          <button type="submit">Termin hinzufügen</button>
-        </form>
       </section>
 
       <section id="notes-panel" class="panel">
@@ -189,14 +352,87 @@
           <h2>Notizen</h2>
           <p>Wichtige Gedanken und Erinnerungen festhalten.</p>
         </div>
-        <div class="list-container">
-          <ul id="note-list" class="item-list"></ul>
+
+        <div class="notes-board board" id="notes-board">
+          <div class="instance-column" data-member="Allgemein">
+            <div class="column-header">
+              <h3>Allgemein</h3>
+              <button type="button" class="column-add-button" aria-label="Neue Notiz für Allgemein hinzufügen">+</button>
+            </div>
+            <p class="column-count"></p>
+            <form class="inline-notes-form hidden" data-member="Allgemein" aria-label="Notiz hinzufügen für Allgemein">
+              <input type="text" class="notes-title-input" placeholder="Titel" required />
+              <textarea class="notes-text-input" rows="4" placeholder="Notiz" required></textarea>
+              <button type="submit">Speichern</button>
+            </form>
+            <ul class="item-list"></ul>
+          </div>
+          <div class="instance-column" data-member="Kristin">
+            <div class="column-header">
+              <h3>Kristin</h3>
+              <button type="button" class="column-add-button" aria-label="Neue Notiz für Kristin hinzufügen">+</button>
+            </div>
+            <p class="column-count"></p>
+            <form class="inline-notes-form hidden" data-member="Kristin" aria-label="Notiz hinzufügen für Kristin">
+              <input type="text" class="notes-title-input" placeholder="Titel" required />
+              <textarea class="notes-text-input" rows="4" placeholder="Notiz" required></textarea>
+              <button type="submit">Speichern</button>
+            </form>
+            <ul class="item-list"></ul>
+          </div>
+          <div class="instance-column" data-member="Tim">
+            <div class="column-header">
+              <h3>Tim</h3>
+              <button type="button" class="column-add-button" aria-label="Neue Notiz für Tim hinzufügen">+</button>
+            </div>
+            <p class="column-count"></p>
+            <form class="inline-notes-form hidden" data-member="Tim" aria-label="Notiz hinzufügen für Tim">
+              <input type="text" class="notes-title-input" placeholder="Titel" required />
+              <textarea class="notes-text-input" rows="4" placeholder="Notiz" required></textarea>
+              <button type="submit">Speichern</button>
+            </form>
+            <ul class="item-list"></ul>
+          </div>
+          <div class="instance-column" data-member="Charlotte">
+            <div class="column-header">
+              <h3>Charlotte</h3>
+              <button type="button" class="column-add-button" aria-label="Neue Notiz für Charlotte hinzufügen">+</button>
+            </div>
+            <p class="column-count"></p>
+            <form class="inline-notes-form hidden" data-member="Charlotte" aria-label="Notiz hinzufügen für Charlotte">
+              <input type="text" class="notes-title-input" placeholder="Titel" required />
+              <textarea class="notes-text-input" rows="4" placeholder="Notiz" required></textarea>
+              <button type="submit">Speichern</button>
+            </form>
+            <ul class="item-list"></ul>
+          </div>
+          <div class="instance-column" data-member="Moritz">
+            <div class="column-header">
+              <h3>Moritz</h3>
+              <button type="button" class="column-add-button" aria-label="Neue Notiz für Moritz hinzufügen">+</button>
+            </div>
+            <p class="column-count"></p>
+            <form class="inline-notes-form hidden" data-member="Moritz" aria-label="Notiz hinzufügen für Moritz">
+              <input type="text" class="notes-title-input" placeholder="Titel" required />
+              <textarea class="notes-text-input" rows="4" placeholder="Notiz" required></textarea>
+              <button type="submit">Speichern</button>
+            </form>
+            <ul class="item-list"></ul>
+          </div>
+          <div class="instance-column" data-member="Offen">
+            <div class="column-header">
+              <h3>Offen</h3>
+              <button type="button" class="column-add-button" aria-label="Neue Notiz für Offen hinzufügen">+</button>
+            </div>
+            <p class="column-count"></p>
+            <form class="inline-notes-form hidden" data-member="Offen" aria-label="Notiz hinzufügen für Offen">
+              <input type="text" class="notes-title-input" placeholder="Titel" required />
+              <textarea class="notes-text-input" rows="4" placeholder="Notiz" required></textarea>
+              <button type="submit">Speichern</button>
+            </form>
+            <ul class="item-list"></ul>
+          </div>
         </div>
-        <form id="note-form" class="entry-form" aria-label="Neue Notiz hinzufügen">
-          <input id="note-title" type="text" placeholder="Titel" required />
-          <textarea id="note-text" rows="4" placeholder="Notiz" required></textarea>
-          <button type="submit">Notiz speichern</button>
-        </form>
       </section>
 
       <section id="contacts-panel" class="panel">
@@ -204,15 +440,93 @@
           <h2>Kontakte</h2>
           <p>Kontaktdaten für die Familie sammeln.</p>
         </div>
-        <div class="list-container">
-          <ul id="contact-list" class="item-list"></ul>
+
+        <div class="contacts-board board" id="contacts-board">
+          <div class="instance-column" data-member="Allgemein">
+            <div class="column-header">
+              <h3>Allgemein</h3>
+              <button type="button" class="column-add-button" aria-label="Neuen Kontakt für Allgemein hinzufügen">+</button>
+            </div>
+            <p class="column-count"></p>
+            <form class="inline-contacts-form hidden" data-member="Allgemein" aria-label="Kontakt hinzufügen für Allgemein">
+              <input type="text" class="contacts-name-input" placeholder="Name" required />
+              <input type="tel" class="contacts-phone-input" placeholder="Telefon" />
+              <input type="text" class="contacts-note-input" placeholder="Notiz" />
+              <button type="submit">Hinzufügen</button>
+            </form>
+            <ul class="item-list"></ul>
+          </div>
+          <div class="instance-column" data-member="Kristin">
+            <div class="column-header">
+              <h3>Kristin</h3>
+              <button type="button" class="column-add-button" aria-label="Neuen Kontakt für Kristin hinzufügen">+</button>
+            </div>
+            <p class="column-count"></p>
+            <form class="inline-contacts-form hidden" data-member="Kristin" aria-label="Kontakt hinzufügen für Kristin">
+              <input type="text" class="contacts-name-input" placeholder="Name" required />
+              <input type="tel" class="contacts-phone-input" placeholder="Telefon" />
+              <input type="text" class="contacts-note-input" placeholder="Notiz" />
+              <button type="submit">Hinzufügen</button>
+            </form>
+            <ul class="item-list"></ul>
+          </div>
+          <div class="instance-column" data-member="Tim">
+            <div class="column-header">
+              <h3>Tim</h3>
+              <button type="button" class="column-add-button" aria-label="Neuen Kontakt für Tim hinzufügen">+</button>
+            </div>
+            <p class="column-count"></p>
+            <form class="inline-contacts-form hidden" data-member="Tim" aria-label="Kontakt hinzufügen für Tim">
+              <input type="text" class="contacts-name-input" placeholder="Name" required />
+              <input type="tel" class="contacts-phone-input" placeholder="Telefon" />
+              <input type="text" class="contacts-note-input" placeholder="Notiz" />
+              <button type="submit">Hinzufügen</button>
+            </form>
+            <ul class="item-list"></ul>
+          </div>
+          <div class="instance-column" data-member="Charlotte">
+            <div class="column-header">
+              <h3>Charlotte</h3>
+              <button type="button" class="column-add-button" aria-label="Neuen Kontakt für Charlotte hinzufügen">+</button>
+            </div>
+            <p class="column-count"></p>
+            <form class="inline-contacts-form hidden" data-member="Charlotte" aria-label="Kontakt hinzufügen für Charlotte">
+              <input type="text" class="contacts-name-input" placeholder="Name" required />
+              <input type="tel" class="contacts-phone-input" placeholder="Telefon" />
+              <input type="text" class="contacts-note-input" placeholder="Notiz" />
+              <button type="submit">Hinzufügen</button>
+            </form>
+            <ul class="item-list"></ul>
+          </div>
+          <div class="instance-column" data-member="Moritz">
+            <div class="column-header">
+              <h3>Moritz</h3>
+              <button type="button" class="column-add-button" aria-label="Neuen Kontakt für Moritz hinzufügen">+</button>
+            </div>
+            <p class="column-count"></p>
+            <form class="inline-contacts-form hidden" data-member="Moritz" aria-label="Kontakt hinzufügen für Moritz">
+              <input type="text" class="contacts-name-input" placeholder="Name" required />
+              <input type="tel" class="contacts-phone-input" placeholder="Telefon" />
+              <input type="text" class="contacts-note-input" placeholder="Notiz" />
+              <button type="submit">Hinzufügen</button>
+            </form>
+            <ul class="item-list"></ul>
+          </div>
+          <div class="instance-column" data-member="Offen">
+            <div class="column-header">
+              <h3>Offen</h3>
+              <button type="button" class="column-add-button" aria-label="Neuen Kontakt für Offen hinzufügen">+</button>
+            </div>
+            <p class="column-count"></p>
+            <form class="inline-contacts-form hidden" data-member="Offen" aria-label="Kontakt hinzufügen für Offen">
+              <input type="text" class="contacts-name-input" placeholder="Name" required />
+              <input type="tel" class="contacts-phone-input" placeholder="Telefon" />
+              <input type="text" class="contacts-note-input" placeholder="Notiz" />
+              <button type="submit">Hinzufügen</button>
+            </form>
+            <ul class="item-list"></ul>
+          </div>
         </div>
-        <form id="contact-form" class="entry-form" aria-label="Neuen Kontakt hinzufügen">
-          <input id="contact-name" type="text" placeholder="Name" required />
-          <input id="contact-phone" type="tel" placeholder="Telefon" />
-          <input id="contact-note" type="text" placeholder="Notiz" />
-          <button type="submit">Kontakt hinzufügen</button>
-        </form>
       </section>
     </main>
   </div>

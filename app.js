@@ -6,17 +6,17 @@ const defaultData = {
     { id: crypto.randomUUID(), title: 'Kindergeburtstag organisieren', due: '', member: 'Offen', priority: 'Dringend', done: false }
   ],
   shopping: [
-    { id: crypto.randomUUID(), item: 'Milch', qty: '2 Liter', category: 'Lebensmittel', done: false },
-    { id: crypto.randomUUID(), item: 'Toilettenpapier', qty: '6 Rollen', category: 'Haushalt', done: false }
+    { id: crypto.randomUUID(), item: 'Milch', qty: '2 Liter', category: 'Lebensmittel', done: false, member: 'Allgemein' },
+    { id: crypto.randomUUID(), item: 'Toilettenpapier', qty: '6 Rollen', category: 'Haushalt', done: false, member: 'Allgemein' }
   ],
   events: [
-    { id: crypto.randomUUID(), title: 'Arzttermin', date: '', time: '', location: 'Hausarzt', done: false },
+    { id: crypto.randomUUID(), title: 'Arzttermin', date: '', time: '', location: 'Hausarzt', done: false, member: 'Allgemein' },
   ],
   notes: [
-    { id: crypto.randomUUID(), title: 'Wochenplan', text: 'Montag: Sport, Dienstag: Musikschule, Freitag: Kinoabend' }
+    { id: crypto.randomUUID(), title: 'Wochenplan', text: 'Montag: Sport, Dienstag: Musikschule, Freitag: Kinoabend', member: 'Allgemein' }
   ],
   contacts: [
-    { id: crypto.randomUUID(), name: 'Oma', phone: '01234 567890', note: 'Notfallkontakt' }
+    { id: crypto.randomUUID(), name: 'Oma', phone: '01234 567890', note: 'Notfallkontakt', member: 'Allgemein' }
   ]
 };
 
@@ -40,10 +40,10 @@ const taskColumns = document.querySelectorAll('.instance-column');
 const addTaskButtons = document.querySelectorAll('.column-add-button');
 const inlineTaskForms = document.querySelectorAll('.inline-task-form');
 const showCompletedCheckbox = document.getElementById('show-completed-toggle');
-const shoppingList = document.getElementById('shopping-list');
-const eventList = document.getElementById('event-list');
-const noteList = document.getElementById('note-list');
-const contactList = document.getElementById('contact-list');
+const shoppingBoard = document.getElementById('shopping-board');
+const eventsBoard = document.getElementById('events-board');
+const notesBoard = document.getElementById('notes-board');
+const contactsBoard = document.getElementById('contacts-board');
 
 const taskMembers = ['Kristin', 'Tim', 'Charlotte', 'Moritz', 'Allgemein', 'Offen'];
 const completedToggleKey = 'family-organizer-showCompletedTasks';
@@ -367,9 +367,143 @@ function setupInlineTaskForms() {
   });
 }
 
-function renderList(type, container) {
-  container.innerHTML = '';
-  state[type].forEach(item => container.appendChild(createItemCard(item, type)));
+function setupInlineEventsForms() {
+  eventsBoard.addEventListener('click', event => {
+    const button = event.target.closest('.column-add-button');
+    if (!button) return;
+    const column = button.closest('.instance-column');
+    const form = column.querySelector('.inline-events-form');
+    document.querySelectorAll('.inline-events-form').forEach(f => {
+      if (f !== form) f.classList.add('hidden');
+    });
+    form.classList.toggle('hidden');
+    if (!form.classList.contains('hidden')) {
+      form.querySelector('.events-title-input').focus();
+    }
+  });
+
+  document.querySelectorAll('.inline-events-form').forEach(form => {
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      const title = form.querySelector('.events-title-input').value.trim();
+      const date = form.querySelector('.events-date-input').value;
+      if (!title || !date) return;
+      const time = form.querySelector('.events-time-input').value;
+      const location = form.querySelector('.events-location-input').value.trim();
+      const member = form.dataset.member;
+      addItem('events', {
+        id: crypto.randomUUID(),
+        title,
+        date,
+        time,
+        location,
+        done: false,
+        member
+      });
+      form.reset();
+      form.classList.add('hidden');
+    });
+  });
+}
+
+function setupInlineNotesForms() {
+  notesBoard.addEventListener('click', event => {
+    const button = event.target.closest('.column-add-button');
+    if (!button) return;
+    const column = button.closest('.instance-column');
+    const form = column.querySelector('.inline-notes-form');
+    document.querySelectorAll('.inline-notes-form').forEach(f => {
+      if (f !== form) f.classList.add('hidden');
+    });
+    form.classList.toggle('hidden');
+    if (!form.classList.contains('hidden')) {
+      form.querySelector('.notes-title-input').focus();
+    }
+  });
+
+  document.querySelectorAll('.inline-notes-form').forEach(form => {
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      const title = form.querySelector('.notes-title-input').value.trim();
+      const text = form.querySelector('.notes-text-input').value.trim();
+      if (!title || !text) return;
+      const member = form.dataset.member;
+      addItem('notes', {
+        id: crypto.randomUUID(),
+        title,
+        text,
+        member
+      });
+      form.reset();
+      form.classList.add('hidden');
+    });
+  });
+}
+
+function setupInlineContactsForms() {
+  contactsBoard.addEventListener('click', event => {
+    const button = event.target.closest('.column-add-button');
+    if (!button) return;
+    const column = button.closest('.instance-column');
+    const form = column.querySelector('.inline-contacts-form');
+    document.querySelectorAll('.inline-contacts-form').forEach(f => {
+      if (f !== form) f.classList.add('hidden');
+    });
+    form.classList.toggle('hidden');
+    if (!form.classList.contains('hidden')) {
+      form.querySelector('.contacts-name-input').focus();
+    }
+  });
+
+  document.querySelectorAll('.inline-contacts-form').forEach(form => {
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      const name = form.querySelector('.contacts-name-input').value.trim();
+      if (!name) return;
+      const phone = form.querySelector('.contacts-phone-input').value.trim();
+      const note = form.querySelector('.contacts-note-input').value.trim();
+      const member = form.dataset.member;
+      addItem('contacts', {
+        id: crypto.randomUUID(),
+        name,
+        phone,
+        note,
+        member
+      });
+      form.reset();
+      form.classList.add('hidden');
+    });
+  });
+}
+
+function renderNotesBoard() {
+  const notesColumns = notesBoard.querySelectorAll('.instance-column');
+  notesColumns.forEach(column => {
+    const list = column.querySelector('.item-list');
+    const member = column.dataset.member;
+    const items = state.notes.filter(item => {
+      const itemMember = taskMembers.includes(item.member) ? item.member : 'Allgemein';
+      return itemMember === member;
+    });
+    list.innerHTML = '';
+    items.forEach(item => list.appendChild(createItemCard(item, 'notes')));
+    column.querySelector('.column-count').textContent = `${items.length} Notizen`;
+  });
+}
+
+function renderContactsBoard() {
+  const contactsColumns = contactsBoard.querySelectorAll('.instance-column');
+  contactsColumns.forEach(column => {
+    const list = column.querySelector('.item-list');
+    const member = column.dataset.member;
+    const items = state.contacts.filter(item => {
+      const itemMember = taskMembers.includes(item.member) ? item.member : 'Allgemein';
+      return itemMember === member;
+    });
+    list.innerHTML = '';
+    items.forEach(item => list.appendChild(createItemCard(item, 'contacts')));
+    column.querySelector('.column-count').textContent = `${items.length} Kontakte`;
+  });
 }
 
 function updateSummary() {
@@ -437,10 +571,10 @@ function toggleDone(type, id) {
 function renderAll() {
   cleanupCompletedTasks();
   renderTaskBoard();
-  renderList('shopping', shoppingList);
-  renderList('events', eventList);
-  renderList('notes', noteList);
-  renderList('contacts', contactList);
+  renderShoppingBoard();
+  renderEventsBoard();
+  renderNotesBoard();
+  renderContactsBoard();
   updateSummary();
 }
 
@@ -511,6 +645,19 @@ contactForm.addEventListener('submit', event => {
   contactForm.reset();
 });
 
+const sidebarToggle = document.getElementById('sidebar-toggle');
+const appShell = document.querySelector('.app-shell');
+const sidebar = document.querySelector('.sidebar');
+
+sidebarToggle.addEventListener('click', () => {
+  appShell.classList.toggle('sidebar-collapsed');
+  sidebar.classList.toggle('collapsed');
+});
+
 setupTaskBoardDragAndDrop();
 setupInlineTaskForms();
+setupInlineShoppingForms();
+setupInlineEventsForms();
+setupInlineNotesForms();
+setupInlineContactsForms();
 renderAll();
