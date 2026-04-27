@@ -127,13 +127,33 @@ function createTaskCard(task) {
   const meta = document.createElement('div');
   meta.className = 'item-meta';
   meta.innerHTML = `<div>Fällig: ${task.due || 'keine Angabe'}</div>`;
-  if (task.due && !task.done && new Date(task.due) < new Date().setHours(0,0,0,0)) {
-    li.classList.add('overdue');
+  if (task.due && !task.done) {
+    const [year, month, day] = task.due.split('-').map(Number);
+    const dueDate = new Date(year, month - 1, day);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (dueDate < today) {
+      li.classList.add('overdue');
+    }
   }
   li.appendChild(meta);
 
   const actions = document.createElement('div');
   actions.className = 'item-actions';
+
+  const editButton = document.createElement('button');
+  editButton.innerHTML = '✏️';
+  editButton.className = 'edit';
+  editButton.type = 'button';
+  editButton.setAttribute('aria-label', 'Bearbeiten');
+  editButton.addEventListener('click', () => {
+    const newTitle = prompt('Aufgaben-Titel bearbeiten', task.title);
+    if (newTitle === null || !newTitle.trim()) return;
+    const newDue = prompt('Fälligkeitsdatum bearbeiten (YYYY-MM-DD)', task.due || '');
+    if (newDue === null || !newDue.trim()) return;
+    updateTask(task.id, { title: newTitle.trim(), due: newDue.trim() });
+  });
+  actions.appendChild(editButton);
 
   const deleteButton = document.createElement('button');
   deleteButton.innerHTML = '🗑️';
@@ -200,12 +220,18 @@ function setupTaskBoardDragAndDrop() {
 }
 
 function setupInlineTaskForms() {
-  addTaskButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      const column = button.closest('.instance-column');
-      const form = column.querySelector('.inline-task-form');
-      form.classList.toggle('hidden');
+  taskBoard.addEventListener('click', event => {
+    const button = event.target.closest('.column-add-button');
+    if (!button) return;
+    const column = button.closest('.instance-column');
+    const form = column.querySelector('.inline-task-form');
+    inlineTaskForms.forEach(f => {
+      if (f !== form) f.classList.add('hidden');
     });
+    form.classList.toggle('hidden');
+    if (!form.classList.contains('hidden')) {
+      form.querySelector('.task-title-input').focus();
+    }
   });
 
   inlineTaskForms.forEach(form => {
@@ -269,6 +295,12 @@ function addItem(type, item) {
 
 function removeItem(type, id) {
   state[type] = state[type].filter(item => item.id !== id);
+  saveState();
+  renderAll();
+}
+
+function updateTask(id, changes) {
+  state.tasks = state.tasks.map(task => task.id === id ? { ...task, ...changes } : task);
   saveState();
   renderAll();
 }
