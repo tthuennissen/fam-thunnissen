@@ -203,6 +203,95 @@ button {
   flex-direction: column;
 }
 
+.instance-column[data-member="Allgemein"] {
+  border-color: #2563eb;
+  background: rgba(37, 99, 235, 0.08);
+}
+
+.instance-column[data-member="Tim"] {
+  border-color: #db2777;
+  background: rgba(219, 39, 119, 0.08);
+}
+
+.instance-column[data-member="Kristin"] {
+  border-color: #16a34a;
+  background: rgba(22, 163, 74, 0.08);
+}
+
+.instance-column[data-member="Charlotte"] {
+  border-color: #d97706;
+  background: rgba(217, 119, 6, 0.08);
+}
+
+.instance-column[data-member="Moritz"] {
+  border-color: #0ea5e9;
+  background: rgba(14, 165, 233, 0.08);
+}
+
+.instance-column[data-member="Offen"] {
+  border-color: #6b7280;
+  background: rgba(107, 114, 128, 0.08);
+}
+
+.column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.column-header h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.column-add-button {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: none;
+  background: var(--primary);
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.inline-task-form {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.inline-task-form.hidden {
+  display: none;
+}
+
+.inline-task-form input,
+.inline-task-form select,
+.inline-task-form button {
+  width: 100%;
+}
+
+.inline-task-form input,
+.inline-task-form select {
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: white;
+}
+
+.inline-task-form button {
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: var(--accent);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
 .instance-column h3 {
   margin: 0 0 10px;
   font-size: 1rem;
