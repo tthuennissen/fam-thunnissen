@@ -138,6 +138,54 @@ function createTaskCard(task) {
   }
   li.appendChild(meta);
 
+  const editForm = document.createElement('form');
+  editForm.className = 'task-edit-form hidden';
+  const editTitle = document.createElement('input');
+  editTitle.type = 'text';
+  editTitle.className = 'task-edit-title';
+  editTitle.value = task.title;
+  editTitle.required = true;
+  editTitle.placeholder = 'Aufgabe';
+
+  const editDue = document.createElement('input');
+  editDue.type = 'date';
+  editDue.className = 'task-edit-due';
+  editDue.value = task.due;
+  editDue.required = true;
+
+  const editActions = document.createElement('div');
+  editActions.className = 'task-edit-actions';
+
+  const saveButton = document.createElement('button');
+  saveButton.type = 'submit';
+  saveButton.textContent = 'OK';
+  saveButton.className = 'task-save-button';
+
+  const cancelButton = document.createElement('button');
+  cancelButton.type = 'button';
+  cancelButton.textContent = '✕';
+  cancelButton.className = 'task-cancel-button';
+  cancelButton.addEventListener('click', () => {
+    editForm.classList.add('hidden');
+    title.classList.remove('hidden');
+    meta.classList.remove('hidden');
+  });
+
+  editActions.appendChild(saveButton);
+  editActions.appendChild(cancelButton);
+  editForm.appendChild(editTitle);
+  editForm.appendChild(editDue);
+  editForm.appendChild(editActions);
+  li.appendChild(editForm);
+
+  editForm.addEventListener('submit', event => {
+    event.preventDefault();
+    const newTitle = editTitle.value.trim();
+    const newDue = editDue.value;
+    if (!newTitle || !newDue) return;
+    updateTask(task.id, { title: newTitle, due: newDue });
+  });
+
   const actions = document.createElement('div');
   actions.className = 'item-actions';
 
@@ -147,11 +195,10 @@ function createTaskCard(task) {
   editButton.type = 'button';
   editButton.setAttribute('aria-label', 'Bearbeiten');
   editButton.addEventListener('click', () => {
-    const newTitle = prompt('Aufgaben-Titel bearbeiten', task.title);
-    if (newTitle === null || !newTitle.trim()) return;
-    const newDue = prompt('Fälligkeitsdatum bearbeiten (YYYY-MM-DD)', task.due || '');
-    if (newDue === null || !newDue.trim()) return;
-    updateTask(task.id, { title: newTitle.trim(), due: newDue.trim() });
+    title.classList.add('hidden');
+    meta.classList.add('hidden');
+    editForm.classList.remove('hidden');
+    editTitle.focus();
   });
   actions.appendChild(editButton);
 
