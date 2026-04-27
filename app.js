@@ -6,8 +6,8 @@ const defaultData = {
     { id: crypto.randomUUID(), title: 'Kindergeburtstag organisieren', due: '', member: 'Offen', priority: 'Dringend', done: false }
   ],
   shopping: [
-    { id: crypto.randomUUID(), item: 'Milch', qty: '2 Liter', category: 'Lebensmittel', done: false, member: 'Allgemein' },
-    { id: crypto.randomUUID(), item: 'Toilettenpapier', qty: '6 Rollen', category: 'Haushalt', done: false, member: 'Allgemein' }
+    { id: crypto.randomUUID(), item: 'Milch', qty: '2 Liter', category: 'Lebensmittel', done: false },
+    { id: crypto.randomUUID(), item: 'Toilettenpapier', qty: '6 Rollen', category: 'Drogerie', done: false }
   ],
   events: [
     { id: crypto.randomUUID(), title: 'Arzttermin', date: '', time: '', location: 'Hausarzt', done: false, member: 'Allgemein' },
@@ -76,6 +76,13 @@ function createItemCard(item, type) {
   const li = document.createElement('li');
   li.className = 'item-card';
   li.dataset.id = item.id;
+
+  if (type === 'shopping') {
+    li.draggable = true;
+    li.addEventListener('dragstart', event => {
+      event.dataTransfer.setData('text/plain', item.id);
+    });
+  }
 
   const title = document.createElement('h4');
   title.textContent = item.title || item.item || item.name;
@@ -304,8 +311,21 @@ function renderTaskBoard() {
   });
 }
 
-function setupTaskBoardDragAndDrop() {
-  taskColumns.forEach(column => {
+function renderShoppingBoard() {
+  const shoppingColumns = shoppingBoard.querySelectorAll('.instance-column');
+  shoppingColumns.forEach(column => {
+    const list = column.querySelector('.item-list');
+    const category = column.dataset.category;
+    const items = state.shopping.filter(item => item.category === category && !item.done);
+    list.innerHTML = '';
+    items.forEach(item => list.appendChild(createItemCard(item, 'shopping')));
+    column.querySelector('.column-count').textContent = `${items.length} offene Artikel`;
+  });
+}
+
+function setupShoppingBoardDragAndDrop() {
+  const shoppingColumns = shoppingBoard.querySelectorAll('.instance-column');
+  shoppingColumns.forEach(column => {
     column.addEventListener('dragover', event => {
       event.preventDefault();
       column.classList.add('drag-over');
@@ -314,12 +334,28 @@ function setupTaskBoardDragAndDrop() {
     column.addEventListener('drop', event => {
       event.preventDefault();
       column.classList.remove('drag-over');
-      const taskId = event.dataTransfer.getData('text/plain');
-      if (taskId) {
-        assignTaskToMember(taskId, column.dataset.member);
+      const itemId = event.dataTransfer.getData('text/plain');
+      if (itemId) {
+        assignShoppingItemToCategory(itemId, column.dataset.category);
       }
     });
   });
+}
+
+function assignShoppingItemToCategory(itemId, newCategory) {
+  const item = state.shopping.find(item => item.id === itemId);
+  if (!item) return;
+
+  if (item.category === 'Standard-Warenkorb') {
+    // Kopieren statt verschieben
+    const newItem = { ...item, id: crypto.randomUUID(), category: newCategory };
+    state.shopping.push(newItem);
+  } else {
+    // Verschieben
+    item.category = newCategory;
+  }
+  saveState();
+  renderAll();
 }
 
 function setupInlineTaskForms() {
@@ -359,6 +395,41 @@ function setupInlineTaskForms() {
         due,
         member,
         priority: 'Normal',
+        done: false
+      });
+      form.reset();
+      form.classList.add('hidden');
+    });
+  });
+}
+
+function setupInlineShoppingForms() {
+  shoppingBoard.addEventListener('click', event => {
+    const button = event.target.closest('.column-add-button');
+    if (!button) return;
+    const column = button.closest('.instance-column');
+    const form = column.querySelector('.inline-shopping-form');
+    document.querySelectorAll('.inline-shopping-form').forEach(f => {
+      if (f !== form) f.classList.add('hidden');
+    });
+    form.classList.toggle('hidden');
+    if (!form.classList.contains('hidden')) {
+      form.querySelector('.shopping-item-input').focus();
+    }
+  });
+
+  document.querySelectorAll('.inline-shopping-form').forEach(form => {
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      const item = form.querySelector('.shopping-item-input').value.trim();
+      if (!item) return;
+      const qty = form.querySelector('.shopping-qty-input').value.trim();
+      const category = form.dataset.category;
+      addItem('shopping', {
+        id: crypto.randomUUID(),
+        item,
+        qty,
+        category,
         done: false
       });
       form.reset();
@@ -660,4 +731,5 @@ setupInlineShoppingForms();
 setupInlineEventsForms();
 setupInlineNotesForms();
 setupInlineContactsForms();
+setupShoppingBoardDragAndDrop();
 renderAll();

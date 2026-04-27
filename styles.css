@@ -271,33 +271,25 @@ button {
   flex-direction: column;
 }
 
-.instance-column[data-member="Allgemein"] {
-  border-color: #2563eb;
-  background: rgba(37, 99, 235, 0.08);
-}
-
-.instance-column[data-member="Tim"] {
-  border-color: #db2777;
-  background: rgba(219, 39, 119, 0.08);
-}
-
-.instance-column[data-member="Kristin"] {
+.instance-column[data-category="Lebensmittel"] {
   border-color: #16a34a;
   background: rgba(22, 163, 74, 0.08);
 }
 
-.instance-column[data-member="Charlotte"] {
-  border-color: #d97706;
-  background: rgba(217, 119, 6, 0.08);
-}
-
-.instance-column[data-member="Moritz"] {
+.instance-column[data-category="Drogerie"] {
   border-color: #0ea5e9;
   background: rgba(14, 165, 233, 0.08);
 }
 
-.instance-column[data-member="Offen"] {
+.instance-column[data-category="Allgemein"] {
   border-color: #6b7280;
+  background: rgba(107, 114, 128, 0.08);
+}
+
+.instance-column[data-category="Standard-Warenkorb"] {
+  border-color: #d97706;
+  background: rgba(217, 119, 6, 0.08);
+}
   background: rgba(107, 114, 128, 0.08);
 }
 

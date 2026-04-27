@@ -160,86 +160,54 @@
         </div>
 
         <div class="shopping-board board" id="shopping-board">
-          <div class="instance-column" data-member="Allgemein">
+          <div class="instance-column" data-category="Lebensmittel">
+            <div class="column-header">
+              <h3>Lebensmittel</h3>
+              <button type="button" class="column-add-button" aria-label="Neuen Einkaufsartikel für Lebensmittel hinzufügen">+</button>
+            </div>
+            <p class="column-count"></p>
+            <form class="inline-shopping-form hidden" data-category="Lebensmittel" aria-label="Artikel hinzufügen für Lebensmittel">
+              <input type="text" class="shopping-item-input" placeholder="Artikel" required />
+              <input type="text" class="shopping-qty-input" placeholder="Menge" />
+              <button type="submit">Hinzufügen</button>
+            </form>
+            <ul class="item-list"></ul>
+          </div>
+          <div class="instance-column" data-category="Drogerie">
+            <div class="column-header">
+              <h3>Drogerie</h3>
+              <button type="button" class="column-add-button" aria-label="Neuen Einkaufsartikel für Drogerie hinzufügen">+</button>
+            </div>
+            <p class="column-count"></p>
+            <form class="inline-shopping-form hidden" data-category="Drogerie" aria-label="Artikel hinzufügen für Drogerie">
+              <input type="text" class="shopping-item-input" placeholder="Artikel" required />
+              <input type="text" class="shopping-qty-input" placeholder="Menge" />
+              <button type="submit">Hinzufügen</button>
+            </form>
+            <ul class="item-list"></ul>
+          </div>
+          <div class="instance-column" data-category="Allgemein">
             <div class="column-header">
               <h3>Allgemein</h3>
               <button type="button" class="column-add-button" aria-label="Neuen Einkaufsartikel für Allgemein hinzufügen">+</button>
             </div>
             <p class="column-count"></p>
-            <form class="inline-shopping-form hidden" data-member="Allgemein" aria-label="Artikel hinzufügen für Allgemein">
+            <form class="inline-shopping-form hidden" data-category="Allgemein" aria-label="Artikel hinzufügen für Allgemein">
               <input type="text" class="shopping-item-input" placeholder="Artikel" required />
               <input type="text" class="shopping-qty-input" placeholder="Menge" />
-              <input type="text" class="shopping-category-input" placeholder="Kategorie" />
               <button type="submit">Hinzufügen</button>
             </form>
             <ul class="item-list"></ul>
           </div>
-          <div class="instance-column" data-member="Kristin">
+          <div class="instance-column" data-category="Standard-Warenkorb">
             <div class="column-header">
-              <h3>Kristin</h3>
-              <button type="button" class="column-add-button" aria-label="Neuen Einkaufsartikel für Kristin hinzufügen">+</button>
+              <h3>Standard-Warenkorb</h3>
+              <button type="button" class="column-add-button" aria-label="Neuen Artikel zum Standard-Warenkorb hinzufügen">+</button>
             </div>
             <p class="column-count"></p>
-            <form class="inline-shopping-form hidden" data-member="Kristin" aria-label="Artikel hinzufügen für Kristin">
+            <form class="inline-shopping-form hidden" data-category="Standard-Warenkorb" aria-label="Artikel zum Standard-Warenkorb hinzufügen">
               <input type="text" class="shopping-item-input" placeholder="Artikel" required />
               <input type="text" class="shopping-qty-input" placeholder="Menge" />
-              <input type="text" class="shopping-category-input" placeholder="Kategorie" />
-              <button type="submit">Hinzufügen</button>
-            </form>
-            <ul class="item-list"></ul>
-          </div>
-          <div class="instance-column" data-member="Tim">
-            <div class="column-header">
-              <h3>Tim</h3>
-              <button type="button" class="column-add-button" aria-label="Neuen Einkaufsartikel für Tim hinzufügen">+</button>
-            </div>
-            <p class="column-count"></p>
-            <form class="inline-shopping-form hidden" data-member="Tim" aria-label="Artikel hinzufügen für Tim">
-              <input type="text" class="shopping-item-input" placeholder="Artikel" required />
-              <input type="text" class="shopping-qty-input" placeholder="Menge" />
-              <input type="text" class="shopping-category-input" placeholder="Kategorie" />
-              <button type="submit">Hinzufügen</button>
-            </form>
-            <ul class="item-list"></ul>
-          </div>
-          <div class="instance-column" data-member="Charlotte">
-            <div class="column-header">
-              <h3>Charlotte</h3>
-              <button type="button" class="column-add-button" aria-label="Neuen Einkaufsartikel für Charlotte hinzufügen">+</button>
-            </div>
-            <p class="column-count"></p>
-            <form class="inline-shopping-form hidden" data-member="Charlotte" aria-label="Artikel hinzufügen für Charlotte">
-              <input type="text" class="shopping-item-input" placeholder="Artikel" required />
-              <input type="text" class="shopping-qty-input" placeholder="Menge" />
-              <input type="text" class="shopping-category-input" placeholder="Kategorie" />
-              <button type="submit">Hinzufügen</button>
-            </form>
-            <ul class="item-list"></ul>
-          </div>
-          <div class="instance-column" data-member="Moritz">
-            <div class="column-header">
-              <h3>Moritz</h3>
-              <button type="button" class="column-add-button" aria-label="Neuen Einkaufsartikel für Moritz hinzufügen">+</button>
-            </div>
-            <p class="column-count"></p>
-            <form class="inline-shopping-form hidden" data-member="Moritz" aria-label="Artikel hinzufügen für Moritz">
-              <input type="text" class="shopping-item-input" placeholder="Artikel" required />
-              <input type="text" class="shopping-qty-input" placeholder="Menge" />
-              <input type="text" class="shopping-category-input" placeholder="Kategorie" />
-              <button type="submit">Hinzufügen</button>
-            </form>
-            <ul class="item-list"></ul>
-          </div>
-          <div class="instance-column" data-member="Offen">
-            <div class="column-header">
-              <h3>Offen</h3>
-              <button type="button" class="column-add-button" aria-label="Neuen Einkaufsartikel für Offen hinzufügen">+</button>
-            </div>
-            <p class="column-count"></p>
-            <form class="inline-shopping-form hidden" data-member="Offen" aria-label="Artikel hinzufügen für Offen">
-              <input type="text" class="shopping-item-input" placeholder="Artikel" required />
-              <input type="text" class="shopping-qty-input" placeholder="Menge" />
-              <input type="text" class="shopping-category-input" placeholder="Kategorie" />
               <button type="submit">Hinzufügen</button>
             </form>
             <ul class="item-list"></ul>
