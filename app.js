@@ -30,7 +30,6 @@ const summaryEvents = document.getElementById('summary-events');
 const summaryNotes = document.getElementById('summary-notes');
 const recentActivity = document.getElementById('recent-activity');
 
-const taskForm = document.getElementById('task-form');
 const shoppingForm = document.getElementById('shopping-form');
 const eventForm = document.getElementById('event-form');
 const noteForm = document.getElementById('note-form');
@@ -38,6 +37,8 @@ const contactForm = document.getElementById('contact-form');
 
 const taskBoard = document.getElementById('task-board');
 const taskColumns = document.querySelectorAll('.instance-column');
+const addTaskButtons = document.querySelectorAll('.column-add-button');
+const inlineTaskForms = document.querySelectorAll('.inline-task-form');
 const shoppingList = document.getElementById('shopping-list');
 const eventList = document.getElementById('event-list');
 const noteList = document.getElementById('note-list');
@@ -68,7 +69,7 @@ function createItemCard(item, type) {
   meta.className = 'item-meta';
 
   if (type === 'tasks') {
-    meta.innerHTML = `<div>Fällig: ${item.due || 'keine Angabe'}</div><div>Person: ${item.member || 'keine Angabe'}</div><div>Priorität: ${item.priority}</div>`;
+    meta.innerHTML = `<div>Fällig: ${item.due || 'keine Angabe'}</div>`;
   }
   if (type === 'shopping') {
     meta.innerHTML = `<div>Menge: ${item.qty || 'keine Angabe'}</div><div>Kategorie: ${item.category || 'keine Angabe'}</div>`;
@@ -91,17 +92,19 @@ function createItemCard(item, type) {
   actions.className = 'item-actions';
 
   const deleteButton = document.createElement('button');
-  deleteButton.textContent = 'Löschen';
+  deleteButton.innerHTML = '🗑️';
   deleteButton.className = 'delete';
   deleteButton.type = 'button';
+  deleteButton.setAttribute('aria-label', 'Löschen');
   deleteButton.addEventListener('click', () => removeItem(type, item.id));
   actions.appendChild(deleteButton);
 
   if (type === 'tasks' || type === 'shopping' || type === 'events') {
     const completeButton = document.createElement('button');
-    completeButton.textContent = item.done ? 'Als offen markieren' : 'Als erledigt markieren';
+    completeButton.innerHTML = item.done ? '↩️' : '✅';
     completeButton.className = 'complete';
     completeButton.type = 'button';
+    completeButton.setAttribute('aria-label', item.done ? 'Als offen markieren' : 'Als erledigt markieren');
     completeButton.addEventListener('click', () => toggleDone(type, item.id));
     actions.appendChild(completeButton);
   }
@@ -123,24 +126,25 @@ function createTaskCard(task) {
 
   const meta = document.createElement('div');
   meta.className = 'item-meta';
-  const member = taskMembers.includes(task.member) ? task.member : 'Allgemein';
-  meta.innerHTML = `<div>Fällig: ${task.due || 'keine Angabe'}</div><div>Person: ${member}</div><div>Priorität: ${task.priority}</div>`;
+  meta.innerHTML = `<div>Fällig: ${task.due || 'keine Angabe'}</div>`;
   li.appendChild(meta);
 
   const actions = document.createElement('div');
   actions.className = 'item-actions';
 
   const deleteButton = document.createElement('button');
-  deleteButton.textContent = 'Löschen';
+  deleteButton.innerHTML = '🗑️';
   deleteButton.className = 'delete';
   deleteButton.type = 'button';
+  deleteButton.setAttribute('aria-label', 'Löschen');
   deleteButton.addEventListener('click', () => removeItem('tasks', task.id));
   actions.appendChild(deleteButton);
 
   const completeButton = document.createElement('button');
-  completeButton.textContent = task.done ? 'Als offen markieren' : 'Als erledigt markieren';
+  completeButton.innerHTML = task.done ? '↩️' : '✅';
   completeButton.className = 'complete';
   completeButton.type = 'button';
+  completeButton.setAttribute('aria-label', task.done ? 'Als offen markieren' : 'Als erledigt markieren');
   completeButton.addEventListener('click', () => toggleDone('tasks', task.id));
   actions.appendChild(completeButton);
 
@@ -188,6 +192,37 @@ function setupTaskBoardDragAndDrop() {
       if (taskId) {
         assignTaskToMember(taskId, column.dataset.member);
       }
+    });
+  });
+}
+
+function setupInlineTaskForms() {
+  addTaskButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const column = button.closest('.instance-column');
+      const form = column.querySelector('.inline-task-form');
+      form.classList.toggle('hidden');
+    });
+  });
+
+  inlineTaskForms.forEach(form => {
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      const title = form.querySelector('.task-title-input').value.trim();
+      if (!title) return;
+      const due = form.querySelector('.task-due-input').value;
+      const priority = form.querySelector('.task-priority-input').value;
+      const member = form.dataset.member;
+      addItem('tasks', {
+        id: crypto.randomUUID(),
+        title,
+        due,
+        member,
+        priority,
+        done: false
+      });
+      form.reset();
+      form.classList.add('hidden');
     });
   });
 }
@@ -255,23 +290,6 @@ navButtons.forEach(button => {
   button.addEventListener('click', () => switchPanel(button.dataset.panel));
 });
 
-taskForm.addEventListener('submit', event => {
-  event.preventDefault();
-  const title = document.getElementById('task-title').value.trim();
-  if (!title) return;
-  const due = document.getElementById('task-due').value;
-  const member = document.getElementById('task-member').value.trim();
-  const priority = document.getElementById('task-priority').value;
-  addItem('tasks', {
-    id: crypto.randomUUID(),
-    title,
-    due,
-    member,
-    priority,
-    done: false
-  });
-  taskForm.reset();
-});
 
 shoppingForm.addEventListener('submit', event => {
   event.preventDefault();
@@ -336,4 +354,5 @@ contactForm.addEventListener('submit', event => {
 });
 
 setupTaskBoardDragAndDrop();
+setupInlineTaskForms();
 renderAll();
