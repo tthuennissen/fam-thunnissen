@@ -260,8 +260,10 @@ button {
 }
 
 .item-actions button.edit {
-  background: #f3f4f6;
-  color: var(--text);
+  background: var(--accent);
+  color: white;
+  font-weight: 600;
+  border-radius: 12px;
 }
 
 .inline-task-form {
