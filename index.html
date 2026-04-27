@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Familienplaner</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <h1>Familienplaner</h1>
+        <p>Planung, Aufgaben & Termine teilen</p>
+      </div>
+
+      <nav class="nav-menu" aria-label="Navigation">
+        <button type="button" class="nav-button active" data-panel="summary-panel">Übersicht</button>
+        <button type="button" class="nav-button" data-panel="tasks-panel">Aufgaben</button>
+        <button type="button" class="nav-button" data-panel="shopping-panel">Einkauf</button>
+        <button type="button" class="nav-button" data-panel="events-panel">Termine</button>
+        <button type="button" class="nav-button" data-panel="notes-panel">Notizen</button>
+        <button type="button" class="nav-button" data-panel="contacts-panel">Kontakte</button>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <section id="summary-panel" class="panel active">
+        <div class="panel-header">
+          <h2>Übersicht</h2>
+          <p>Aktuelle Aufgaben und Aktivitäten im Überblick.</p>
+        </div>
+
+        <div class="summary-grid">
+          <div class="summary-card">
+            <h3 id="summary-tasks">0</h3>
+            <p>offene Aufgaben</p>
+          </div>
+          <div class="summary-card">
+            <h3 id="summary-shopping">0</h3>
+            <p>offene Einkaufsartikel</p>
+          </div>
+          <div class="summary-card">
+            <h3 id="summary-events">0</h3>
+            <p>geplante Termine</p>
+          </div>
+          <div class="summary-card">
+            <h3 id="summary-notes">0</h3>
+            <p>Notizen</p>
+          </div>
+        </div>
+
+        <div class="activity-panel">
+          <h3>Letzte Aktivitäten</h3>
+          <ul id="recent-activity" class="activity-list"></ul>
+        </div>
+      </section>
+
+      <section id="tasks-panel" class="panel">
+        <div class="panel-header">
+          <h2>Aufgabenplanung</h2>
+          <p>Tasks lassen sich per Drag & Drop zwischen Instanzen verschieben.</p>
+        </div>
+
+        <div class="task-board" id="task-board">
+          <div class="instance-column" data-member="Kristin">
+            <h3>Kristin</h3>
+            <p class="column-count"></p>
+            <ul class="task-list"></ul>
+          </div>
+          <div class="instance-column" data-member="Tim">
+            <h3>Tim</h3>
+            <p class="column-count"></p>
+            <ul class="task-list"></ul>
+          </div>
+          <div class="instance-column" data-member="Charlotte">
+            <h3>Charlotte</h3>
+            <p class="column-count"></p>
+            <ul class="task-list"></ul>
+          </div>
+          <div class="instance-column" data-member="Moritz">
+            <h3>Moritz</h3>
+            <p class="column-count"></p>
+            <ul class="task-list"></ul>
+          </div>
+          <div class="instance-column" data-member="Allgemein">
+            <h3>Allgemein</h3>
+            <p class="column-count"></p>
+            <ul class="task-list"></ul>
+          </div>
+          <div class="instance-column" data-member="Offen">
+            <h3>Offen</h3>
+            <p class="column-count"></p>
+            <ul class="task-list"></ul>
+          </div>
+        </div>
+
+        <form id="task-form" class="entry-form" aria-label="Neue Aufgabe hinzufügen">
+          <input id="task-title" type="text" placeholder="Aufgabe" required />
+          <select id="task-member" required>
+            <option value="Kristin">Kristin</option>
+            <option value="Tim">Tim</option>
+            <option value="Charlotte">Charlotte</option>
+            <option value="Moritz">Moritz</option>
+            <option value="Allgemein">Allgemein</option>
+            <option value="Offen">Offen</option>
+          </select>
+          <input id="task-due" type="date" />
+          <select id="task-priority">
+            <option value="Normal">Normal</option>
+            <option value="Wichtig">Wichtig</option>
+            <option value="Dringend">Dringend</option>
+          </select>
+          <button type="submit">Aufgabe hinzufügen</button>
+        </form>
+      </section>
+
+      <section id="shopping-panel" class="panel">
+        <div class="panel-header">
+          <h2>Einkaufsliste</h2>
+          <p>Artikel hinzufügen und als erledigt markieren.</p>
+        </div>
+        <div class="list-container">
+          <ul id="shopping-list" class="item-list"></ul>
+        </div>
+        <form id="shopping-form" class="entry-form" aria-label="Neuen Einkaufsartikel hinzufügen">
+          <input id="shopping-item" type="text" placeholder="Artikel" required />
+          <input id="shopping-qty" type="text" placeholder="Menge" />
+          <input id="shopping-category" type="text" placeholder="Kategorie" />
+          <button type="submit">Artikel hinzufügen</button>
+        </form>
+      </section>
+
+      <section id="events-panel" class="panel">
+        <div class="panel-header">
+          <h2>Termine</h2>
+          <p>Wichtige Termine verwalten.</p>
+        </div>
+        <div class="list-container">
+          <ul id="event-list" class="item-list"></ul>
+        </div>
+        <form id="event-form" class="entry-form" aria-label="Neuen Termin hinzufügen">
+          <input id="event-title" type="text" placeholder="Termin" required />
+          <input id="event-date" type="date" required />
+          <input id="event-time" type="time" />
+          <input id="event-location" type="text" placeholder="Ort" />
+          <button type="submit">Termin hinzufügen</button>
+        </form>
+      </section>
+
+      <section id="notes-panel" class="panel">
+        <div class="panel-header">
+          <h2>Notizen</h2>
+          <p>Wichtige Gedanken und Erinnerungen festhalten.</p>
+        </div>
+        <div class="list-container">
+          <ul id="note-list" class="item-list"></ul>
+        </div>
+        <form id="note-form" class="entry-form" aria-label="Neue Notiz hinzufügen">
+          <input id="note-title" type="text" placeholder="Titel" required />
+          <textarea id="note-text" rows="4" placeholder="Notiz" required></textarea>
+          <button type="submit">Notiz speichern</button>
+        </form>
+      </section>
+
+      <section id="contacts-panel" class="panel">
+        <div class="panel-header">
+          <h2>Kontakte</h2>
+          <p>Kontaktdaten für die Familie sammeln.</p>
+        </div>
+        <div class="list-container">
+          <ul id="contact-list" class="item-list"></ul>
+        </div>
+        <form id="contact-form" class="entry-form" aria-label="Neuen Kontakt hinzufügen">
+          <input id="contact-name" type="text" placeholder="Name" required />
+          <input id="contact-phone" type="tel" placeholder="Telefon" />
+          <input id="contact-note" type="text" placeholder="Notiz" />
+          <button type="submit">Kontakt hinzufügen</button>
+        </form>
+      </section>
+    </main>
+  </div>
+  <script src="app.js" defer></script>
+</body>
+</html>
