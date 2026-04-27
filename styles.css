@@ -364,15 +364,16 @@ button {
 .item-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
 }
 
 .item-actions button {
-  padding: 6px 8px;
+  padding: 4px 6px;
   border-radius: 10px;
   background: #eef2f8;
   color: var(--text);
-  font-size: 0.85rem;
+  font-size: 0.75rem;
+  min-width: 32px;
 }
 
 .item-actions button.delete {
