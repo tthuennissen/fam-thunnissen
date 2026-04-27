@@ -247,13 +247,13 @@ button {
 }
 
 .column-add-button {
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   border: none;
   background: var(--primary);
   color: white;
-  font-size: 1rem;
+  font-size: 0.9rem;
   cursor: pointer;
   display: grid;
   place-items: center;
@@ -294,12 +294,13 @@ button {
 }
 
 .inline-task-form button {
-  padding: 10px 12px;
-  border-radius: 14px;
+  padding: 8px 10px;
+  border-radius: 12px;
   background: var(--accent);
   color: white;
   font-weight: 600;
   cursor: pointer;
+  font-size: 0.95rem;
 }
 
 .instance-column h3 {
@@ -368,10 +369,11 @@ button {
 }
 
 .item-actions button {
-  padding: 10px 14px;
-  border-radius: 14px;
+  padding: 8px 10px;
+  border-radius: 12px;
   background: #eef2f8;
   color: var(--text);
+  font-size: 0.95rem;
 }
 
 .item-actions button.delete {
