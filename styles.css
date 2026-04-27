@@ -335,6 +335,9 @@ button {
   background: var(--surface-strong);
   display: grid;
   gap: 10px;
+  min-height: 160px;
+  max-height: 180px;
+  overflow: hidden;
 }
 
 .item-card.overdue {
