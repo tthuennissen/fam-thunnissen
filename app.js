@@ -444,7 +444,8 @@ function setupInlineTaskForms() {
   }
 
   document.addEventListener('click', event => {
-    const button = event.target.closest('.column-add-button');
+    const target = event.target instanceof Element ? event.target : event.target.parentElement;
+    const button = target && target.closest ? target.closest('.column-add-button') : null;
     if (!button) return;
     const column = button.closest('.instance-column');
     if (!column) return;
@@ -484,8 +485,11 @@ function setupInlineTaskForms() {
 function setupInlineShoppingForms() {
   const shoppingAddButtons = document.querySelectorAll('#shopping-board .column-add-button');
   shoppingAddButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      const column = button.closest('.instance-column');
+    button.addEventListener('click', event => {
+      const target = event.target instanceof Element ? event.target : event.target.parentElement;
+      const btn = target && target.closest ? target.closest('.column-add-button') : null;
+      if (!btn) return;
+      const column = btn.closest('.instance-column');
       const form = column.querySelector('.inline-shopping-form');
       document.querySelectorAll('.inline-shopping-form').forEach(f => {
         if (f !== form) f.classList.add('hidden');
@@ -521,8 +525,11 @@ function setupInlineShoppingForms() {
 function setupInlineEventsForms() {
   const eventsAddButtons = document.querySelectorAll('#events-board .column-add-button');
   eventsAddButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      const column = button.closest('.instance-column');
+    button.addEventListener('click', event => {
+      const target = event.target instanceof Element ? event.target : event.target.parentElement;
+      const btn = target && target.closest ? target.closest('.column-add-button') : null;
+      if (!btn) return;
+      const column = btn.closest('.instance-column');
       const form = column.querySelector('.inline-events-form');
       document.querySelectorAll('.inline-events-form').forEach(f => {
         if (f !== form) f.classList.add('hidden');
@@ -562,8 +569,11 @@ function setupInlineEventsForms() {
 function setupInlineNotesForms() {
   const notesAddButtons = document.querySelectorAll('#notes-board .column-add-button');
   notesAddButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      const column = button.closest('.instance-column');
+    button.addEventListener('click', event => {
+      const target = event.target instanceof Element ? event.target : event.target.parentElement;
+      const btn = target && target.closest ? target.closest('.column-add-button') : null;
+      if (!btn) return;
+      const column = btn.closest('.instance-column');
       const form = column.querySelector('.inline-notes-form');
       document.querySelectorAll('.inline-notes-form').forEach(f => {
         if (f !== form) f.classList.add('hidden');
@@ -598,8 +608,11 @@ function setupInlineNotesForms() {
 function setupInlineContactsForms() {
   const contactsAddButtons = document.querySelectorAll('#contacts-board .column-add-button');
   contactsAddButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      const column = button.closest('.instance-column');
+    button.addEventListener('click', event => {
+      const target = event.target instanceof Element ? event.target : event.target.parentElement;
+      const btn = target && target.closest ? target.closest('.column-add-button') : null;
+      if (!btn) return;
+      const column = btn.closest('.instance-column');
       const form = column.querySelector('.inline-contacts-form');
       document.querySelectorAll('.inline-contacts-form').forEach(f => {
         if (f !== form) f.classList.add('hidden');
