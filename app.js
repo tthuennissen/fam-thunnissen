@@ -433,6 +433,21 @@ function assignShoppingItemToCategory(itemId, newCategory) {
   renderAll();
 }
 
+function toggleTaskForm(button) {
+  const column = button.closest('.instance-column');
+  if (!column) return;
+  const form = column.querySelector('.inline-task-form');
+  if (!form) return;
+  document.querySelectorAll('.inline-task-form').forEach(f => {
+    if (f !== form) f.classList.add('hidden');
+  });
+  form.classList.toggle('hidden');
+  if (!form.classList.contains('hidden')) {
+    const input = form.querySelector('.task-title-input');
+    if (input) input.focus();
+  }
+}
+
 function setupInlineTaskForms() {
   if (showCompletedCheckbox) {
     showCompletedCheckbox.checked = showCompletedTasks;
