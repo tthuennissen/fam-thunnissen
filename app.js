@@ -443,21 +443,24 @@ function setupInlineTaskForms() {
     });
   }
 
-  document.addEventListener('click', event => {
-    const target = event.target instanceof Element ? event.target : event.target.parentElement;
-    const button = target && target.closest ? target.closest('.column-add-button') : null;
-    if (!button) return;
-    const column = button.closest('.instance-column');
-    if (!column) return;
-    const form = column.querySelector('.inline-task-form');
-    if (!form) return;
-    document.querySelectorAll('.inline-task-form').forEach(f => {
-      if (f !== form) f.classList.add('hidden');
+  const taskAddButtons = document.querySelectorAll('#task-board .column-add-button');
+  taskAddButtons.forEach(button => {
+    button.addEventListener('click', event => {
+      event.preventDefault();
+      event.stopPropagation();
+      const column = button.closest('.instance-column');
+      if (!column) return;
+      const form = column.querySelector('.inline-task-form');
+      if (!form) return;
+      document.querySelectorAll('.inline-task-form').forEach(f => {
+        if (f !== form) f.classList.add('hidden');
+      });
+      form.classList.toggle('hidden');
+      if (!form.classList.contains('hidden')) {
+        const input = form.querySelector('.task-title-input');
+        if (input) input.focus();
+      }
     });
-    form.classList.toggle('hidden');
-    if (!form.classList.contains('hidden')) {
-      form.querySelector('.task-title-input').focus();
-    }
   });
 
   const taskForms = document.querySelectorAll('.inline-task-form');
