@@ -443,11 +443,13 @@ function setupInlineTaskForms() {
     });
   }
 
-  taskBoard.addEventListener('click', event => {
+  document.addEventListener('click', event => {
     const button = event.target.closest('.column-add-button');
     if (!button) return;
     const column = button.closest('.instance-column');
+    if (!column) return;
     const form = column.querySelector('.inline-task-form');
+    if (!form) return;
     document.querySelectorAll('.inline-task-form').forEach(f => {
       if (f !== form) f.classList.add('hidden');
     });
