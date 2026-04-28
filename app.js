@@ -378,6 +378,26 @@ function renderContactsBoard() {
   });
 }
 
+function setupTaskBoardDragAndDrop() {
+  const taskColumns = taskBoard.querySelectorAll('.instance-column');
+  taskColumns.forEach(column => {
+    column.addEventListener('dragover', event => {
+      event.preventDefault();
+      column.classList.add('drag-over');
+    });
+    column.addEventListener('dragleave', () => column.classList.remove('drag-over'));
+    column.addEventListener('drop', event => {
+      event.preventDefault();
+      column.classList.remove('drag-over');
+      const taskId = event.dataTransfer.getData('text/plain');
+      if (taskId) {
+        const newMember = column.dataset.member;
+        assignTaskToMember(taskId, newMember);
+      }
+    });
+  });
+}
+
 function setupShoppingBoardDragAndDrop() {
   const shoppingColumns = shoppingBoard.querySelectorAll('.instance-column');
   shoppingColumns.forEach(column => {
@@ -423,8 +443,8 @@ function setupInlineTaskForms() {
     });
   }
 
-  document.addEventListener('click', event => {
-    const button = event.target.closest('#task-board .column-add-button');
+  taskBoard.addEventListener('click', event => {
+    const button = event.target.closest('.column-add-button');
     if (!button) return;
     const column = button.closest('.instance-column');
     const form = column.querySelector('.inline-task-form');
@@ -437,168 +457,177 @@ function setupInlineTaskForms() {
     }
   });
 
-  document.addEventListener('submit', event => {
-    const form = event.target.closest('.inline-task-form');
-    if (!form) return;
-    event.preventDefault();
-    const title = form.querySelector('.task-title-input').value.trim();
-    const due = form.querySelector('.task-due-input').value;
-    if (!title || !due) return;
-    const member = form.dataset.member;
-    addItem('tasks', {
-      id: crypto.randomUUID(),
-      title,
-      due,
-      member,
-      priority: 'Normal',
-      done: false
+  const taskForms = document.querySelectorAll('.inline-task-form');
+  taskForms.forEach(form => {
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      const title = form.querySelector('.task-title-input').value.trim();
+      const due = form.querySelector('.task-due-input').value;
+      if (!title || !due) return;
+      const member = form.dataset.member;
+      addItem('tasks', {
+        id: crypto.randomUUID(),
+        title,
+        due,
+        member,
+        priority: 'Normal',
+        done: false
+      });
+      form.reset();
+      form.classList.add('hidden');
     });
-    form.reset();
-    form.classList.add('hidden');
   });
 }
 
 function setupInlineShoppingForms() {
-  document.addEventListener('click', event => {
-    const button = event.target.closest('#shopping-board .column-add-button');
-    if (!button) return;
-    const column = button.closest('.instance-column');
-    const form = column.querySelector('.inline-shopping-form');
-    document.querySelectorAll('.inline-shopping-form').forEach(f => {
-      if (f !== form) f.classList.add('hidden');
+  const shoppingAddButtons = document.querySelectorAll('#shopping-board .column-add-button');
+  shoppingAddButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const column = button.closest('.instance-column');
+      const form = column.querySelector('.inline-shopping-form');
+      document.querySelectorAll('.inline-shopping-form').forEach(f => {
+        if (f !== form) f.classList.add('hidden');
+      });
+      form.classList.toggle('hidden');
+      if (!form.classList.contains('hidden')) {
+        form.querySelector('.shopping-item-input').focus();
+      }
     });
-    form.classList.toggle('hidden');
-    if (!form.classList.contains('hidden')) {
-      form.querySelector('.shopping-item-input').focus();
-    }
   });
 
-  document.addEventListener('submit', event => {
-    const form = event.target.closest('.inline-shopping-form');
-    if (!form) return;
-    event.preventDefault();
-    const item = form.querySelector('.shopping-item-input').value.trim();
-    if (!item) return;
-    const qty = form.querySelector('.shopping-qty-input').value.trim();
-    const category = form.dataset.category;
-    addItem('shopping', {
-      id: crypto.randomUUID(),
-      item,
-      qty,
-      category,
-      done: false
+  const shoppingForms = document.querySelectorAll('.inline-shopping-form');
+  shoppingForms.forEach(form => {
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      const item = form.querySelector('.shopping-item-input').value.trim();
+      if (!item) return;
+      const qty = form.querySelector('.shopping-qty-input').value.trim();
+      const category = form.dataset.category;
+      addItem('shopping', {
+        id: crypto.randomUUID(),
+        item,
+        qty,
+        category,
+        done: false
+      });
+      form.reset();
+      form.classList.add('hidden');
     });
-    form.reset();
-    form.classList.add('hidden');
   });
 }
 
 function setupInlineEventsForms() {
-  document.addEventListener('click', event => {
-    const button = event.target.closest('#events-board .column-add-button');
-    if (!button) return;
-    const column = button.closest('.instance-column');
-    const form = column.querySelector('.inline-events-form');
-    document.querySelectorAll('.inline-events-form').forEach(f => {
-      if (f !== form) f.classList.add('hidden');
+  const eventsAddButtons = document.querySelectorAll('#events-board .column-add-button');
+  eventsAddButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const column = button.closest('.instance-column');
+      const form = column.querySelector('.inline-events-form');
+      document.querySelectorAll('.inline-events-form').forEach(f => {
+        if (f !== form) f.classList.add('hidden');
+      });
+      form.classList.toggle('hidden');
+      if (!form.classList.contains('hidden')) {
+        form.querySelector('.events-title-input').focus();
+      }
     });
-    form.classList.toggle('hidden');
-    if (!form.classList.contains('hidden')) {
-      form.querySelector('.events-title-input').focus();
-    }
   });
 
-  document.addEventListener('submit', event => {
-    const form = event.target.closest('.inline-events-form');
-    if (!form) return;
-    event.preventDefault();
-    const title = form.querySelector('.events-title-input').value.trim();
-    const date = form.querySelector('.events-date-input').value;
-    if (!title || !date) return;
-    const time = form.querySelector('.events-time-input').value;
-    const location = form.querySelector('.events-location-input').value.trim();
-    const member = form.dataset.member;
-    addItem('events', {
-      id: crypto.randomUUID(),
-      title,
-      date,
-      time,
-      location,
-      done: false,
-      member
+  const eventsForms = document.querySelectorAll('.inline-events-form');
+  eventsForms.forEach(form => {
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      const title = form.querySelector('.events-title-input').value.trim();
+      const date = form.querySelector('.events-date-input').value;
+      if (!title || !date) return;
+      const time = form.querySelector('.events-time-input').value;
+      const location = form.querySelector('.events-location-input').value.trim();
+      const member = form.dataset.member;
+      addItem('events', {
+        id: crypto.randomUUID(),
+        title,
+        date,
+        time,
+        location,
+        done: false,
+        member
+      });
+      form.reset();
+      form.classList.add('hidden');
     });
-    form.reset();
-    form.classList.add('hidden');
   });
 }
 
 function setupInlineNotesForms() {
-  document.addEventListener('click', event => {
-    const button = event.target.closest('#notes-board .column-add-button');
-    if (!button) return;
-    const column = button.closest('.instance-column');
-    const form = column.querySelector('.inline-notes-form');
-    document.querySelectorAll('.inline-notes-form').forEach(f => {
-      if (f !== form) f.classList.add('hidden');
+  const notesAddButtons = document.querySelectorAll('#notes-board .column-add-button');
+  notesAddButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const column = button.closest('.instance-column');
+      const form = column.querySelector('.inline-notes-form');
+      document.querySelectorAll('.inline-notes-form').forEach(f => {
+        if (f !== form) f.classList.add('hidden');
+      });
+      form.classList.toggle('hidden');
+      if (!form.classList.contains('hidden')) {
+        form.querySelector('.notes-title-input').focus();
+      }
     });
-    form.classList.toggle('hidden');
-    if (!form.classList.contains('hidden')) {
-      form.querySelector('.notes-title-input').focus();
-    }
   });
 
-  document.addEventListener('submit', event => {
-    const form = event.target.closest('.inline-notes-form');
-    if (!form) return;
-    event.preventDefault();
-    const title = form.querySelector('.notes-title-input').value.trim();
-    const text = form.querySelector('.notes-text-input').value.trim();
-    if (!title || !text) return;
-    const member = form.dataset.member;
-    addItem('notes', {
-      id: crypto.randomUUID(),
-      title,
-      text,
-      member
+  const notesForms = document.querySelectorAll('.inline-notes-form');
+  notesForms.forEach(form => {
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      const title = form.querySelector('.notes-title-input').value.trim();
+      const text = form.querySelector('.notes-text-input').value.trim();
+      if (!title || !text) return;
+      const member = form.dataset.member;
+      addItem('notes', {
+        id: crypto.randomUUID(),
+        title,
+        text,
+        member
+      });
+      form.reset();
+      form.classList.add('hidden');
     });
-    form.reset();
-    form.classList.add('hidden');
   });
 }
 
 function setupInlineContactsForms() {
-  document.addEventListener('click', event => {
-    const button = event.target.closest('#contacts-board .column-add-button');
-    if (!button) return;
-    const column = button.closest('.instance-column');
-    const form = column.querySelector('.inline-contacts-form');
-    document.querySelectorAll('.inline-contacts-form').forEach(f => {
-      if (f !== form) f.classList.add('hidden');
+  const contactsAddButtons = document.querySelectorAll('#contacts-board .column-add-button');
+  contactsAddButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const column = button.closest('.instance-column');
+      const form = column.querySelector('.inline-contacts-form');
+      document.querySelectorAll('.inline-contacts-form').forEach(f => {
+        if (f !== form) f.classList.add('hidden');
+      });
+      form.classList.toggle('hidden');
+      if (!form.classList.contains('hidden')) {
+        form.querySelector('.contacts-name-input').focus();
+      }
     });
-    form.classList.toggle('hidden');
-    if (!form.classList.contains('hidden')) {
-      form.querySelector('.contacts-name-input').focus();
-    }
   });
 
-  document.addEventListener('submit', event => {
-    const form = event.target.closest('.inline-contacts-form');
-    if (!form) return;
-    event.preventDefault();
-    const name = form.querySelector('.contacts-name-input').value.trim();
-    if (!name) return;
-    const phone = form.querySelector('.contacts-phone-input').value.trim();
-    const note = form.querySelector('.contacts-note-input').value.trim();
-    const member = form.dataset.member;
-    addItem('contacts', {
-      id: crypto.randomUUID(),
-      name,
-      phone,
-      note,
-      member
+  const contactsForms = document.querySelectorAll('.inline-contacts-form');
+  contactsForms.forEach(form => {
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      const name = form.querySelector('.contacts-name-input').value.trim();
+      if (!name) return;
+      const phone = form.querySelector('.contacts-phone-input').value.trim();
+      const note = form.querySelector('.contacts-note-input').value.trim();
+      const member = form.dataset.member;
+      addItem('contacts', {
+        id: crypto.randomUUID(),
+        name,
+        phone,
+        note,
+        member
+      });
+      form.reset();
+      form.classList.add('hidden');
     });
-    form.reset();
-    form.classList.add('hidden');
   });
 }
 

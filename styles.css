@@ -291,6 +291,128 @@ button {
   background: rgba(217, 119, 6, 0.08);
 }
 
+/* Task board member colors */
+.task-board .instance-column[data-member="Tim"] {
+  border-color: #2563eb !important;
+  background: rgba(37, 99, 235, 0.08) !important;
+}
+
+.task-board .instance-column[data-member="Kristin"] {
+  border-color: #7c3aed !important;
+  background: rgba(124, 58, 237, 0.08) !important;
+}
+
+.task-board .instance-column[data-member="Charlotte"] {
+  border-color: #db2777 !important;
+  background: rgba(219, 39, 119, 0.08) !important;
+}
+
+.task-board .instance-column[data-member="Moritz"] {
+  border-color: #0ea5e9 !important;
+  background: rgba(14, 165, 233, 0.08) !important;
+}
+
+.task-board .instance-column[data-member="Allgemein"] {
+  border-color: #6b7280 !important;
+  background: rgba(107, 114, 128, 0.08) !important;
+}
+
+.task-board .instance-column[data-member="Offen"] {
+  border-color: #f59e0b !important;
+  background: rgba(245, 158, 11, 0.08) !important;
+}
+
+/* Same colors for other boards */
+.events-board .instance-column[data-member="Tim"] {
+  border-color: #2563eb;
+  background: rgba(37, 99, 235, 0.08);
+}
+
+.events-board .instance-column[data-member="Kristin"] {
+  border-color: #7c3aed;
+  background: rgba(124, 58, 237, 0.08);
+}
+
+.events-board .instance-column[data-member="Charlotte"] {
+  border-color: #db2777;
+  background: rgba(219, 39, 119, 0.08);
+}
+
+.events-board .instance-column[data-member="Moritz"] {
+  border-color: #0ea5e9;
+  background: rgba(14, 165, 233, 0.08);
+}
+
+.events-board .instance-column[data-member="Allgemein"] {
+  border-color: #6b7280;
+  background: rgba(107, 114, 128, 0.08);
+}
+
+.events-board .instance-column[data-member="Offen"] {
+  border-color: #f59e0b;
+  background: rgba(245, 158, 11, 0.08);
+}
+
+.notes-board .instance-column[data-member="Tim"] {
+  border-color: #2563eb;
+  background: rgba(37, 99, 235, 0.08);
+}
+
+.notes-board .instance-column[data-member="Kristin"] {
+  border-color: #7c3aed;
+  background: rgba(124, 58, 237, 0.08);
+}
+
+.notes-board .instance-column[data-member="Charlotte"] {
+  border-color: #db2777;
+  background: rgba(219, 39, 119, 0.08);
+}
+
+.notes-board .instance-column[data-member="Moritz"] {
+  border-color: #0ea5e9;
+  background: rgba(14, 165, 233, 0.08);
+}
+
+.notes-board .instance-column[data-member="Allgemein"] {
+  border-color: #6b7280;
+  background: rgba(107, 114, 128, 0.08);
+}
+
+.notes-board .instance-column[data-member="Offen"] {
+  border-color: #f59e0b;
+  background: rgba(245, 158, 11, 0.08);
+}
+
+.contacts-board .instance-column[data-member="Tim"] {
+  border-color: #2563eb;
+  background: rgba(37, 99, 235, 0.08);
+}
+
+.contacts-board .instance-column[data-member="Kristin"] {
+  border-color: #7c3aed;
+  background: rgba(124, 58, 237, 0.08);
+}
+
+.contacts-board .instance-column[data-member="Charlotte"] {
+  border-color: #db2777;
+  background: rgba(219, 39, 119, 0.08);
+}
+
+.contacts-board .instance-column[data-member="Moritz"] {
+  border-color: #0ea5e9;
+  background: rgba(14, 165, 233, 0.08);
+}
+
+.contacts-board .instance-column[data-member="Allgemein"] {
+  border-color: #6b7280;
+  background: rgba(107, 114, 128, 0.08);
+}
+
+.contacts-board .instance-column[data-member="Offen"] {
+  border-color: #f59e0b;
+  background: rgba(245, 158, 11, 0.08);
+}
+
 .column-header {
   display: flex;
   align-items: center;
