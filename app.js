@@ -36,7 +36,7 @@ const noteForm = document.getElementById('note-form');
 const contactForm = document.getElementById('contact-form');
 
 const taskBoard = document.getElementById('task-board');
-const taskColumns = document.querySelectorAll('.instance-column');
+const taskColumns = taskBoard.querySelectorAll('.instance-column');
 const addTaskButtons = document.querySelectorAll('.column-add-button');
 const inlineTaskForms = document.querySelectorAll('.inline-task-form');
 const showCompletedCheckbox = document.getElementById('show-completed-toggle');
@@ -70,6 +70,9 @@ function cleanupCompletedTasks() {
 function switchPanel(panelId) {
   panels.forEach(panel => panel.classList.toggle('active', panel.id === panelId));
   navButtons.forEach(button => button.classList.toggle('active', button.dataset.panel === panelId));
+  if (panelId === 'events-panel') {
+    renderCalendar();
+  }
 }
 
 function createItemCard(item, type) {
@@ -139,9 +142,15 @@ function createItemCard(item, type) {
 
 function createTaskCard(task) {
   const li = document.createElement('li');
-  li.className = 'item-card';
+  li.className = 'item-card task-card';
   li.draggable = !task.done;
   li.dataset.id = task.id;
+  li.dataset.member = task.member;
+
+  const label = document.createElement('div');
+  label.className = 'task-card-label';
+  label.textContent = `${task.member} · ${task.priority || 'Normal'}`;
+  li.appendChild(label);
 
   const title = document.createElement('h4');
   title.textContent = task.title;
@@ -316,13 +325,14 @@ function renderEventsBoard() {
   eventsColumns.forEach(column => {
     const list = column.querySelector('.item-list');
     const member = column.dataset.member;
-    const items = state.events.filter(item => {
+    let items = state.events.filter(item => {
       const itemMember = taskMembers.includes(item.member) ? item.member : 'Allgemein';
       return itemMember === member && !item.done;
     });
+    items = items.sort((a, b) => new Date(a.date) - new Date(b.date)).slice(0, 3);
     list.innerHTML = '';
     items.forEach(item => list.appendChild(createItemCard(item, 'events')));
-    column.querySelector('.column-count').textContent = `${items.length} geplante Termine`;
+    column.querySelector('.column-count').textContent = `${items.length} nächste Termine`;
   });
 }
 
@@ -401,12 +411,12 @@ function setupInlineTaskForms() {
     });
   }
 
-  taskBoard.addEventListener('click', event => {
-    const button = event.target.closest('.column-add-button');
+  document.addEventListener('click', event => {
+    const button = event.target.closest('#task-board .column-add-button');
     if (!button) return;
     const column = button.closest('.instance-column');
     const form = column.querySelector('.inline-task-form');
-    inlineTaskForms.forEach(f => {
+    document.querySelectorAll('.inline-task-form').forEach(f => {
       if (f !== form) f.classList.add('hidden');
     });
     form.classList.toggle('hidden');
@@ -415,30 +425,30 @@ function setupInlineTaskForms() {
     }
   });
 
-  inlineTaskForms.forEach(form => {
-    form.addEventListener('submit', event => {
-      event.preventDefault();
-      const title = form.querySelector('.task-title-input').value.trim();
-      const due = form.querySelector('.task-due-input').value;
-      if (!title || !due) return;
-      const member = form.dataset.member;
-      addItem('tasks', {
-        id: crypto.randomUUID(),
-        title,
-        due,
-        member,
-        priority: 'Normal',
-        done: false
-      });
-      form.reset();
-      form.classList.add('hidden');
+  document.addEventListener('submit', event => {
+    const form = event.target.closest('.inline-task-form');
+    if (!form) return;
+    event.preventDefault();
+    const title = form.querySelector('.task-title-input').value.trim();
+    const due = form.querySelector('.task-due-input').value;
+    if (!title || !due) return;
+    const member = form.dataset.member;
+    addItem('tasks', {
+      id: crypto.randomUUID(),
+      title,
+      due,
+      member,
+      priority: 'Normal',
+      done: false
     });
+    form.reset();
+    form.classList.add('hidden');
   });
 }
 
 function setupInlineShoppingForms() {
-  shoppingBoard.addEventListener('click', event => {
-    const button = event.target.closest('.column-add-button');
+  document.addEventListener('click', event => {
+    const button = event.target.closest('#shopping-board .column-add-button');
     if (!button) return;
     const column = button.closest('.instance-column');
     const form = column.querySelector('.inline-shopping-form');
@@ -451,29 +461,29 @@ function setupInlineShoppingForms() {
     }
   });
 
-  document.querySelectorAll('.inline-shopping-form').forEach(form => {
-    form.addEventListener('submit', event => {
-      event.preventDefault();
-      const item = form.querySelector('.shopping-item-input').value.trim();
-      if (!item) return;
-      const qty = form.querySelector('.shopping-qty-input').value.trim();
-      const category = form.dataset.category;
-      addItem('shopping', {
-        id: crypto.randomUUID(),
-        item,
-        qty,
-        category,
-        done: false
-      });
-      form.reset();
-      form.classList.add('hidden');
+  document.addEventListener('submit', event => {
+    const form = event.target.closest('.inline-shopping-form');
+    if (!form) return;
+    event.preventDefault();
+    const item = form.querySelector('.shopping-item-input').value.trim();
+    if (!item) return;
+    const qty = form.querySelector('.shopping-qty-input').value.trim();
+    const category = form.dataset.category;
+    addItem('shopping', {
+      id: crypto.randomUUID(),
+      item,
+      qty,
+      category,
+      done: false
     });
+    form.reset();
+    form.classList.add('hidden');
   });
 }
 
 function setupInlineEventsForms() {
-  eventsBoard.addEventListener('click', event => {
-    const button = event.target.closest('.column-add-button');
+  document.addEventListener('click', event => {
+    const button = event.target.closest('#events-board .column-add-button');
     if (!button) return;
     const column = button.closest('.instance-column');
     const form = column.querySelector('.inline-events-form');
@@ -486,33 +496,33 @@ function setupInlineEventsForms() {
     }
   });
 
-  document.querySelectorAll('.inline-events-form').forEach(form => {
-    form.addEventListener('submit', event => {
-      event.preventDefault();
-      const title = form.querySelector('.events-title-input').value.trim();
-      const date = form.querySelector('.events-date-input').value;
-      if (!title || !date) return;
-      const time = form.querySelector('.events-time-input').value;
-      const location = form.querySelector('.events-location-input').value.trim();
-      const member = form.dataset.member;
-      addItem('events', {
-        id: crypto.randomUUID(),
-        title,
-        date,
-        time,
-        location,
-        done: false,
-        member
-      });
-      form.reset();
-      form.classList.add('hidden');
+  document.addEventListener('submit', event => {
+    const form = event.target.closest('.inline-events-form');
+    if (!form) return;
+    event.preventDefault();
+    const title = form.querySelector('.events-title-input').value.trim();
+    const date = form.querySelector('.events-date-input').value;
+    if (!title || !date) return;
+    const time = form.querySelector('.events-time-input').value;
+    const location = form.querySelector('.events-location-input').value.trim();
+    const member = form.dataset.member;
+    addItem('events', {
+      id: crypto.randomUUID(),
+      title,
+      date,
+      time,
+      location,
+      done: false,
+      member
     });
+    form.reset();
+    form.classList.add('hidden');
   });
 }
 
 function setupInlineNotesForms() {
-  notesBoard.addEventListener('click', event => {
-    const button = event.target.closest('.column-add-button');
+  document.addEventListener('click', event => {
+    const button = event.target.closest('#notes-board .column-add-button');
     if (!button) return;
     const column = button.closest('.instance-column');
     const form = column.querySelector('.inline-notes-form');
@@ -525,28 +535,28 @@ function setupInlineNotesForms() {
     }
   });
 
-  document.querySelectorAll('.inline-notes-form').forEach(form => {
-    form.addEventListener('submit', event => {
-      event.preventDefault();
-      const title = form.querySelector('.notes-title-input').value.trim();
-      const text = form.querySelector('.notes-text-input').value.trim();
-      if (!title || !text) return;
-      const member = form.dataset.member;
-      addItem('notes', {
-        id: crypto.randomUUID(),
-        title,
-        text,
-        member
-      });
-      form.reset();
-      form.classList.add('hidden');
+  document.addEventListener('submit', event => {
+    const form = event.target.closest('.inline-notes-form');
+    if (!form) return;
+    event.preventDefault();
+    const title = form.querySelector('.notes-title-input').value.trim();
+    const text = form.querySelector('.notes-text-input').value.trim();
+    if (!title || !text) return;
+    const member = form.dataset.member;
+    addItem('notes', {
+      id: crypto.randomUUID(),
+      title,
+      text,
+      member
     });
+    form.reset();
+    form.classList.add('hidden');
   });
 }
 
 function setupInlineContactsForms() {
-  contactsBoard.addEventListener('click', event => {
-    const button = event.target.closest('.column-add-button');
+  document.addEventListener('click', event => {
+    const button = event.target.closest('#contacts-board .column-add-button');
     if (!button) return;
     const column = button.closest('.instance-column');
     const form = column.querySelector('.inline-contacts-form');
@@ -559,24 +569,24 @@ function setupInlineContactsForms() {
     }
   });
 
-  document.querySelectorAll('.inline-contacts-form').forEach(form => {
-    form.addEventListener('submit', event => {
-      event.preventDefault();
-      const name = form.querySelector('.contacts-name-input').value.trim();
-      if (!name) return;
-      const phone = form.querySelector('.contacts-phone-input').value.trim();
-      const note = form.querySelector('.contacts-note-input').value.trim();
-      const member = form.dataset.member;
-      addItem('contacts', {
-        id: crypto.randomUUID(),
-        name,
-        phone,
-        note,
-        member
-      });
-      form.reset();
-      form.classList.add('hidden');
+  document.addEventListener('submit', event => {
+    const form = event.target.closest('.inline-contacts-form');
+    if (!form) return;
+    event.preventDefault();
+    const name = form.querySelector('.contacts-name-input').value.trim();
+    if (!name) return;
+    const phone = form.querySelector('.contacts-phone-input').value.trim();
+    const note = form.querySelector('.contacts-note-input').value.trim();
+    const member = form.dataset.member;
+    addItem('contacts', {
+      id: crypto.randomUUID(),
+      name,
+      phone,
+      note,
+      member
     });
+    form.reset();
+    form.classList.add('hidden');
   });
 }
 
@@ -608,6 +618,32 @@ function renderContactsBoard() {
     items.forEach(item => list.appendChild(createItemCard(item, 'contacts')));
     column.querySelector('.column-count').textContent = `${items.length} Kontakte`;
   });
+}
+
+function renderCalendar() {
+  const calendarEl = document.getElementById('calendar');
+  if (!calendarEl) return;
+
+  // Destroy existing calendar if any
+  if (window.calendar) {
+    window.calendar.destroy();
+  }
+
+  const events = state.events.map(event => ({
+    title: event.title,
+    start: event.date + (event.time ? 'T' + event.time : ''),
+    extendedProps: { location: event.location, member: event.member }
+  }));
+
+  window.calendar = new FullCalendar.Calendar(calendarEl, {
+    initialView: 'dayGridMonth',
+    events: events,
+    eventClick: function(info) {
+      alert('Termin: ' + info.event.title + '\nOrt: ' + (info.event.extendedProps.location || 'keine Angabe') + '\nMitglied: ' + info.event.extendedProps.member);
+    }
+  });
+
+  window.calendar.render();
 }
 
 function updateSummary() {

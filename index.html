@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Familienplaner</title>
   <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
 </head>
 <body>
   <div class="app-shell">
@@ -220,6 +221,8 @@
           <h2>Termine</h2>
           <p>Wichtige Termine verwalten.</p>
         </div>
+
+        <div id="calendar" style="max-width: 1100px; margin: 0 auto;"></div>
 
         <div class="events-board board" id="events-board">
           <div class="instance-column" data-member="Allgemein">
