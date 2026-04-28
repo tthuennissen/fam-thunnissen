@@ -476,6 +476,7 @@ function setupInlineTaskForms() {
         if (input) input.focus();
       }
     });
+    button.dataset.inlineHandler = 'true';
   });
 
   const taskForms = document.querySelectorAll('.inline-task-form');
@@ -497,6 +498,7 @@ function setupInlineTaskForms() {
       form.reset();
       form.classList.add('hidden');
     });
+    form.dataset.inlineHandler = 'true';
   });
 }
 
@@ -517,6 +519,7 @@ function setupInlineShoppingForms() {
         form.querySelector('.shopping-item-input').focus();
       }
     });
+    button.dataset.inlineHandler = 'true';
   });
 
   const shoppingForms = document.querySelectorAll('.inline-shopping-form');
@@ -537,6 +540,7 @@ function setupInlineShoppingForms() {
       form.reset();
       form.classList.add('hidden');
     });
+    form.dataset.inlineHandler = 'true';
   });
 }
 
@@ -557,6 +561,7 @@ function setupInlineEventsForms() {
         form.querySelector('.events-title-input').focus();
       }
     });
+    button.dataset.inlineHandler = 'true';
   });
 
   const eventsForms = document.querySelectorAll('.inline-events-form');
@@ -581,6 +586,7 @@ function setupInlineEventsForms() {
       form.reset();
       form.classList.add('hidden');
     });
+    form.dataset.inlineHandler = 'true';
   });
 }
 
@@ -601,6 +607,7 @@ function setupInlineNotesForms() {
         form.querySelector('.notes-title-input').focus();
       }
     });
+    button.dataset.inlineHandler = 'true';
   });
 
   const notesForms = document.querySelectorAll('.inline-notes-form');
@@ -620,6 +627,7 @@ function setupInlineNotesForms() {
       form.reset();
       form.classList.add('hidden');
     });
+    form.dataset.inlineHandler = 'true';
   });
 }
 
@@ -640,6 +648,7 @@ function setupInlineContactsForms() {
         form.querySelector('.contacts-name-input').focus();
       }
     });
+    button.dataset.inlineHandler = 'true';
   });
 
   const contactsForms = document.querySelectorAll('.inline-contacts-form');
@@ -661,6 +670,104 @@ function setupInlineContactsForms() {
       form.reset();
       form.classList.add('hidden');
     });
+    form.dataset.inlineHandler = 'true';
+  });
+}
+
+function setupInlineFormDelegation() {
+  document.body.addEventListener('click', event => {
+    const button = event.target.closest('.column-add-button');
+    if (!button || button.dataset.inlineHandler === 'true') return;
+    const column = button.closest('.instance-column');
+    if (!column) return;
+    const form = column.querySelector('form');
+    if (!form) return;
+    event.preventDefault();
+    event.stopPropagation();
+    document.querySelectorAll('.inline-task-form, .inline-shopping-form, .inline-events-form, .inline-notes-form, .inline-contacts-form').forEach(f => {
+      if (f !== form) f.classList.add('hidden');
+    });
+    form.classList.toggle('hidden');
+    if (!form.classList.contains('hidden')) {
+      const input = form.querySelector('input, textarea');
+      if (input) input.focus();
+    }
+  });
+
+  document.body.addEventListener('submit', event => {
+    const form = event.target.closest('.inline-task-form, .inline-shopping-form, .inline-events-form, .inline-notes-form, .inline-contacts-form');
+    if (!form || form.dataset.inlineHandler === 'true') return;
+    event.preventDefault();
+
+    if (form.classList.contains('inline-task-form')) {
+      const title = form.querySelector('.task-title-input').value.trim();
+      const due = form.querySelector('.task-due-input').value;
+      if (!title || !due) return;
+      const member = form.dataset.member;
+      addItem('tasks', {
+        id: crypto.randomUUID(),
+        title,
+        due,
+        member,
+        priority: 'Normal',
+        done: false
+      });
+    } else if (form.classList.contains('inline-shopping-form')) {
+      const item = form.querySelector('.shopping-item-input').value.trim();
+      if (!item) return;
+      const qty = form.querySelector('.shopping-qty-input').value.trim();
+      const category = form.dataset.category;
+      addItem('shopping', {
+        id: crypto.randomUUID(),
+        item,
+        qty,
+        category,
+        done: false
+      });
+    } else if (form.classList.contains('inline-events-form')) {
+      const title = form.querySelector('.events-title-input').value.trim();
+      const date = form.querySelector('.events-date-input').value;
+      if (!title || !date) return;
+      const time = form.querySelector('.events-time-input').value;
+      const location = form.querySelector('.events-location-input').value.trim();
+      const member = form.dataset.member;
+      addItem('events', {
+        id: crypto.randomUUID(),
+        title,
+        date,
+        time,
+        location,
+        done: false,
+        member
+      });
+    } else if (form.classList.contains('inline-notes-form')) {
+      const title = form.querySelector('.notes-title-input').value.trim();
+      const text = form.querySelector('.notes-text-input').value.trim();
+      if (!title || !text) return;
+      const member = form.dataset.member;
+      addItem('notes', {
+        id: crypto.randomUUID(),
+        title,
+        text,
+        member
+      });
+    } else if (form.classList.contains('inline-contacts-form')) {
+      const name = form.querySelector('.contacts-name-input').value.trim();
+      if (!name) return;
+      const phone = form.querySelector('.contacts-phone-input').value.trim();
+      const note = form.querySelector('.contacts-note-input').value.trim();
+      const member = form.dataset.member;
+      addItem('contacts', {
+        id: crypto.randomUUID(),
+        name,
+        phone,
+        note,
+        member
+      });
+    }
+
+    form.reset();
+    form.classList.add('hidden');
   });
 }
 
@@ -847,5 +954,6 @@ setupInlineShoppingForms();
 setupInlineEventsForms();
 setupInlineNotesForms();
 setupInlineContactsForms();
+setupInlineFormDelegation();
 setupShoppingBoardDragAndDrop();
 renderAll();
